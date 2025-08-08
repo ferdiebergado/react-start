@@ -8,16 +8,25 @@ import { NavLink } from 'react-router'
 
 export default function Header() {
     return (
-        <NavigationMenu className="w-full">
-            <NavigationMenuList>
-                <NavigationMenuItem>
-                    <NavigationMenuLink asChild>
-                        <NavLink to="/" end>
-                            Home
-                        </NavLink>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-            </NavigationMenuList>
-        </NavigationMenu>
+        <header className="bg-foreground text-background px-12 py-3">
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink asChild>
+                            <NavLink to="/" end>
+                                Home
+                            </NavLink>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink asChild>
+                            <NavLink to="/about" end>
+                                About
+                            </NavLink>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
+        </header>
     )
 }
