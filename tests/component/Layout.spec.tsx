@@ -1,10 +1,10 @@
+import Home from '@/components/Home'
+import Layout from '@/components/Layout'
 import { createRoutesStub } from 'react-router'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
-import Home from '../../src/components/Home'
-import Layout from '../../src/components/Layout'
 
-it('renders the layout', async () => {
+it.concurrent('renders the layout', async () => {
     const Stub = createRoutesStub([
         {
             path: '/',
