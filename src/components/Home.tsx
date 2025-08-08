@@ -3,7 +3,6 @@ import {
     CardAction,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
@@ -11,20 +10,17 @@ import { Button } from './ui/button'
 
 export default function Home() {
     return (
-        <Card className="mx-12 my-4 shadow-md">
+        <Card className="m-16 shadow-md">
             <CardHeader>
-                <CardTitle>Home</CardTitle>
+                <CardTitle className="text-3xl">Home</CardTitle>
                 <CardDescription>Home Page</CardDescription>
                 <CardAction>
-                    <Button>Get started</Button>
+                    <Button className="bg-primary">Get started</Button>
                 </CardAction>
             </CardHeader>
             <CardContent>
-                <p>Welcome!</p>
+                <h1 className="text-4xl">Welcome!</h1>
             </CardContent>
-            <CardFooter>
-                <p>Card Footer</p>
-            </CardFooter>
         </Card>
     )
 }
