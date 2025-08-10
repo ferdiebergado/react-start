@@ -8,7 +8,7 @@ import { NavLink } from 'react-router'
 
 export default function Header() {
     return (
-        <header className="bg-foreground text-background px-12 py-3">
+        <header className="px-12 py-3 shadow-md">
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
