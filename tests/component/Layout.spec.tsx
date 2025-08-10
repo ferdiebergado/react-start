@@ -1,4 +1,4 @@
-import Home from '@/components/Home'
+import Home from '@/Home'
 import Layout from '@/components/Layout'
 import { createRoutesStub } from 'react-router'
 import { expect, it } from 'vitest'

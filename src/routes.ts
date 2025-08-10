@@ -1,8 +1,8 @@
 import type { RouteObject } from 'react-router'
 import ErrorBoundary from './components/ErrorBoundary'
-import Home from './components/Home'
 import Layout from './components/Layout'
 import NotFound from './components/NotFound'
+import Home from './Home'
 
 export const routes: RouteObject[] = [
     {
