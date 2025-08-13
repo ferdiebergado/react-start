@@ -4,9 +4,11 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
 } from '@/components/ui/navigation-menu'
+import type { FC } from 'react'
 import Link from './Link'
+import ModeToggle from './ModeToggle'
 
-export default function Header() {
+const Header: FC = () => {
     return (
         <header className="px-12 py-3 shadow-md">
             <NavigationMenu>
@@ -25,8 +27,13 @@ export default function Header() {
                             </Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <ModeToggle />
+                    </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
         </header>
     )
 }
+
+export default Header
