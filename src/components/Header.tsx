@@ -4,7 +4,7 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
 } from '@/components/ui/navigation-menu'
-import { NavLink } from 'react-router'
+import Link from './Link'
 
 export default function Header() {
     return (
@@ -13,16 +13,16 @@ export default function Header() {
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <NavigationMenuLink asChild>
-                            <NavLink to="/" end>
+                            <Link to="/" end>
                                 Home
-                            </NavLink>
+                            </Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <NavigationMenuLink asChild>
-                            <NavLink to="/about" end>
+                            <Link to="/about" end>
                                 About
-                            </NavLink>
+                            </Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
                 </NavigationMenuList>
