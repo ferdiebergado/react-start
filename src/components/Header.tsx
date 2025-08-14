@@ -1,7 +1,6 @@
 import {
     NavigationMenu,
     NavigationMenuItem,
-    NavigationMenuLink,
     NavigationMenuList,
 } from '@/components/ui/navigation-menu'
 import type { FC } from 'react'
@@ -14,18 +13,14 @@ const Header: FC = () => {
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
-                        <NavigationMenuLink asChild>
-                            <Link to="/" end>
-                                Home
-                            </Link>
-                        </NavigationMenuLink>
+                        <Link to="/" end>
+                            Home
+                        </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationMenuLink asChild>
-                            <Link to="/about" end>
-                                About
-                            </Link>
-                        </NavigationMenuLink>
+                        <Link to="/about" end>
+                            About
+                        </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <ModeToggle />
