@@ -1,9 +1,10 @@
+import { type FC } from 'react'
 import { Outlet } from 'react-router'
 import Footer from './Footer'
 import Header from './Header'
 import ThemeProvider from './ThemeProvider'
 
-export default function Layout() {
+const Layout: FC = () => {
     return (
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
             <Header />
@@ -16,3 +17,5 @@ export default function Layout() {
         </ThemeProvider>
     )
 }
+
+export default Layout

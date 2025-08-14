@@ -1,5 +1,8 @@
+import { type FC } from 'react'
 import ErrorPage from './ErrorPage'
 
-export default function NotFound() {
+const NotFound: FC = () => {
     return <ErrorPage msg="Page not found." />
 }
+
+export default NotFound

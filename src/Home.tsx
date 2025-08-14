@@ -7,8 +7,9 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
+import type { FC } from 'react'
 
-export default function Home() {
+const Home: FC = () => {
     return (
         <Card className="m-16 shadow-md">
             <CardHeader>
@@ -24,3 +25,5 @@ export default function Home() {
         </Card>
     )
 }
+
+export default Home

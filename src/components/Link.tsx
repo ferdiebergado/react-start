@@ -1,7 +1,8 @@
+import { type FC } from 'react'
 import { NavLink, useNavigation, type NavLinkProps } from 'react-router'
 import { NavigationMenuLink } from './ui/navigation-menu'
 
-export default function Link({ to, ...props }: NavLinkProps) {
+const Link: FC<NavLinkProps> = ({ to, ...props }: NavLinkProps) => {
     const { location } = useNavigation()
     const isActive = to === location?.pathname
 
@@ -11,3 +12,5 @@ export default function Link({ to, ...props }: NavLinkProps) {
         </NavigationMenuLink>
     )
 }
+
+export default Link
