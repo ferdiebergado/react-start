@@ -4,7 +4,7 @@ import {
     type Theme,
     type ThemeProviderProps,
 } from '@/lib/theme'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
     children,
@@ -48,14 +48,16 @@ const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
         root.classList.add(theme)
     }, [theme])
 
-    // eslint-disable-next-line react-x/no-unstable-context-value
-    const value = {
-        theme,
-        setTheme: (theme: Theme) => {
-            localStorage.setItem(storageKey, theme)
-            setTheme(theme)
-        },
-    }
+    const value = useMemo(
+        () => ({
+            theme,
+            setTheme: (newTheme: Theme) => {
+                localStorage.setItem(storageKey, newTheme)
+                setTheme(newTheme)
+            },
+        }),
+        [storageKey, theme]
+    )
 
     return (
         <ThemeProviderContext {...props} value={value}>
