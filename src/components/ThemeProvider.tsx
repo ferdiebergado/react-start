@@ -12,10 +12,18 @@ const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
     storageKey = 'vite-ui-theme',
     ...props
 }: ThemeProviderProps) => {
-    const [theme, setTheme] = useState<Theme>(
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-    )
+    const [theme, setTheme] = useState<Theme>(() => {
+        const savedTheme = localStorage.getItem(storageKey)
+
+        let theme: Theme
+        if (savedTheme) {
+            theme = savedTheme as Theme
+        } else {
+            theme = defaultTheme
+        }
+
+        return theme
+    })
 
     useEffect(() => {
         const root = window.document.documentElement
