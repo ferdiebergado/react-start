@@ -2,7 +2,7 @@ import ThemeProvider from '@/components/ThemeProvider'
 import { useTheme } from '@/lib/theme'
 import type { FC } from 'react'
 import {
-    afterAll,
+    beforeAll,
     beforeEach,
     describe,
     expect,
@@ -44,19 +44,19 @@ describe('ThemeProvider', () => {
 
     const matchMediaMock = createMatchMediaMock()
 
-    beforeEach(() => {
-        vi.stubGlobal('localStorage', localStorageMock)
-
-        vi.stubGlobal(
-            'matchMedia',
-            vi.fn(() => matchMediaMock)
-        )
-
-        localStorage.clear()
+    beforeAll(() => {
+        Object.defineProperty(window, 'localStorage', {
+            value: localStorageMock,
+            writable: true,
+        })
+        Object.defineProperty(window, 'matchMedia', {
+            value: vi.fn(() => matchMediaMock),
+            writable: true,
+        })
     })
 
-    afterAll(() => {
-        vi.unstubAllGlobals()
+    beforeEach(() => {
+        localStorage.clear()
     })
 
     const TestComponent: FC = () => {
