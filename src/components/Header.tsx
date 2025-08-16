@@ -9,7 +9,7 @@ import ModeToggle from './ModeToggle'
 
 const Header: FC = () => {
     return (
-        <header className="px-12 py-3 shadow-md">
+        <header className="px-12 py-3 shadow-md dark:shadow-gray-600">
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
