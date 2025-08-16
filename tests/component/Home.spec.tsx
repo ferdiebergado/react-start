@@ -1,12 +1,40 @@
 import Home from '@/Home'
-import { expect, it } from 'vitest'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createRoutesStub } from 'react-router'
+import { describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 
-it('shows welcome', async () => {
-    const { getByRole } = render(<Home />)
+const mockQuote = {
+    quote: 'Stay hungry, stay foolish.',
+    author: 'Steve Jobs',
+}
 
-    const heading = getByRole('heading')
+vi.mock('@/home/useQuoteQuery', () => ({
+    useQuoteQuery: () => ({ data: mockQuote }),
+}))
 
-    await expect.element(heading).toBeVisible()
-    await expect.element(heading).toHaveTextContent('Welcome')
+describe('<Home />', () => {
+    it('renders quote and author', async () => {
+        const queryClient = new QueryClient()
+
+        const StubRouter = createRoutesStub([
+            {
+                path: '/',
+                Component: Home,
+                loader: () => mockQuote,
+            },
+        ])
+
+        const { getByText } = render(
+            <QueryClientProvider client={queryClient}>
+                <StubRouter initialEntries={['/']} />
+            </QueryClientProvider>
+        )
+
+        await expect.element(getByText(/Random Quote/)).toBeVisible()
+        await expect
+            .element(getByText(/Stay hungry, stay foolish./))
+            .toBeVisible()
+        await expect.element(getByText(/Steve Jobs/)).toBeVisible()
+    })
 })
