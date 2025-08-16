@@ -2,6 +2,8 @@
 
 A modern React SPA starter template with routing, data fetching, styling, and testing out-of-the-box. Built with simplicity and developer productivity in mind.
 
+## Tech Stack
+
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 ![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
@@ -11,17 +13,20 @@ A modern React SPA starter template with routing, data fetching, styling, and te
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-## Features
-
 - ⚛ **React** – Modern component architecture
 - 🛣 **React Router (Data mode)** – Config-based routing with loaders and actions
 - 🔍 **React Query** – Declarative server state management
 - 🎨 **Tailwind CSS** – Utility-first styling
+- 💅 **shadcn/ui** – Beautifully designed components built on top of Radix UI and Tailwind CSS
 - 🧪 **Vitest** – Unit and component testing
 - 🎭 **Playwright** – End-to-end testing
 - ⚡ **Vite** – Fast builds and HMR
 - 🛡 **TypeScript** – Type safety
 - 🧹 **ESLint + Prettier + EditorConfig** – Consistent code style
+
+## Features
+
+- Dark mode support
 
 ## Requirements
 
@@ -70,3 +75,11 @@ pnpm run test:e2e
 pnpm run build
 pnpm run preview
 ```
+
+## Routing
+
+[React Router docs](https://reactrouter.com/start/data/routing)
+
+## Data fetching
+
+[React Query docs](https://tanstack.com/query/latest/docs/framework/react/quick-start)
