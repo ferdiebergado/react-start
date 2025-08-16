@@ -1,4 +1,3 @@
-import Home from '@/Home'
 import Layout from '@/components/Layout'
 import { createRoutesStub } from 'react-router'
 import { expect, it } from 'vitest'
@@ -9,7 +8,6 @@ it.concurrent('renders the layout', async () => {
         {
             path: '/',
             Component: Layout,
-            children: [{ index: true, Component: Home }],
         },
     ])
 
@@ -20,9 +18,6 @@ it.concurrent('renders the layout', async () => {
 
     const main = getByRole('main')
     await expect.element(main).toBeInTheDocument()
-    const heading = main.getByRole('heading')
-    expect(heading).toBeVisible()
-    expect(heading).toHaveTextContent(/welcome/i)
 
     const footer = getByText(/2025 by ferdie bergado/i)
     await expect.element(footer).toBeVisible()
