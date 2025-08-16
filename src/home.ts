@@ -1,4 +1,4 @@
-import { QueryClient, queryOptions } from '@tanstack/react-query'
+import { QueryClient, queryOptions, useQuery } from '@tanstack/react-query'
 
 interface Quote {
     id: number
@@ -15,6 +15,13 @@ export const quoteQuery = queryOptions({
     queryKey: ['random'],
     queryFn: fetchRandomQuote,
 })
+
+export function useQuoteQuery(initialData: Quote) {
+    return useQuery({
+        ...quoteQuery,
+        initialData,
+    })
+}
 
 export function quoteLoader(queryClient: QueryClient) {
     return async function () {

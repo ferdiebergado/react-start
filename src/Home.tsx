@@ -5,19 +5,16 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { useQuery } from '@tanstack/react-query'
 import type { FC } from 'react'
 import { useLoaderData } from 'react-router'
-import { quoteLoader, quoteQuery } from './home'
+import { quoteLoader, useQuoteQuery } from './home'
 
 const Home: FC = () => {
     const initialData = useLoaderData<Awaited<ReturnType<typeof quoteLoader>>>()
+
     const {
         data: { quote, author },
-    } = useQuery({
-        ...quoteQuery,
-        initialData,
-    })
+    } = useQuoteQuery(initialData)
 
     return (
         <Card className="m-16 shadow-md">
