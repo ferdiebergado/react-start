@@ -35,12 +35,7 @@ A modern React SPA starter template with routing, data fetching, styling, and te
 
 ## Getting Started
 
-1. Clone the repo.
-
-```sh
-   git clone https://github.com/ferdiebergado/react-start.git
-   cd react-start
-```
+1. [Create a repository from the template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template).
 
 2. Install dependencies.
 
@@ -78,8 +73,168 @@ pnpm run preview
 
 ## Routing
 
-[React Router docs](https://reactrouter.com/start/data/routing)
+This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<RouterProvider>`, enabling declarative navigation between different pages.
+
+All routes are defined in `src/routes.ts`.
+
+The `createBrowserRouter` function in `src/App.tsx` reads these routes.
+
+```ts
+// App.tsx
+import { routes } from './routes'
+
+const router = createBrowserRouter(routes)
+```
+
+To create a route, add a route object to the `routes` array:
+
+```ts
+// src/routes.ts
+export const routes: RouteObject[] = [
+    {
+        path: '/',
+        Component: Layout,
+        ErrorBoundary: ErrorBoundary,
+        HydrateFallback: Spinner,
+        children: [{ index: true, Component: Home }],
+    },
+    {
+        path: '*',
+        Component: NotFound,
+    },
+]
+```
+
+For a complete guide on defining routes and using hooks like `useNavigate`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
 ## Data fetching
 
-[React Query docs](https://tanstack.com/query/latest/docs/framework/react/quick-start)
+We utilize **React Query** for efficient server-state management. The `QueryClient` is globally configured and wrapped around the application to provide a simple API for fetching, caching, and updating data.
+
+```ts
+// src/lib/queryClient.ts
+import { QueryClient } from '@tanstack/react-query'
+
+export default new QueryClient()
+
+// src/App.tsx
+const App: FC = () => {
+    return (
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+        </QueryClientProvider>
+    )
+}
+```
+
+To fetch data with React Query, create a loader function that takes a `QueryClient` as an argument. The loader function should return a function which in turn returns the result of the call to `ensureQueryData` on the queryClient.
+
+```ts
+// src/home.ts
+interface Quote {
+    id: number
+    quote: string
+    author: string
+}
+
+async function fetchRandomQuote(): Promise<Quote> {
+    const res = await fetch('https://dummyjson.com/quotes/random')
+    return (await res.json()) as Quote
+}
+
+export const quoteQuery = queryOptions({
+    queryKey: ['random'],
+    queryFn: fetchRandomQuote,
+})
+
+export function quoteLoader(queryClient: QueryClient) {
+    return async function () {
+        return await queryClient.ensureQueryData(quoteQuery)
+    }
+}
+```
+
+Next, add the loader to the loader key of the route object in `src/routes.ts`.
+
+```ts
+// src/routes.ts
+export const routes: RouteObject[] = [
+    {
+        path: '/',
+        Component: Layout,
+        ErrorBoundary: ErrorBoundary,
+        HydrateFallback: Spinner,
+        children: [
+            { index: true, Component: Home, loader: quoteLoader(queryClient) },
+        ],
+    },
+    {
+        path: '*',
+        Component: NotFound,
+    },
+]
+```
+
+Finally, call `useQuery` on the component to make the fetched data available to it.
+
+```ts
+// src/Home.tsx
+const Home: FC = () => {
+    const initialData = useLoaderData<Awaited<ReturnType<typeof quoteLoader>>>()
+
+    const {
+        data: { quote, author },
+    } = useQuery({
+        ...quoteQuery,
+        initialData,
+    })
+
+    return (
+        <Card className="m-16 shadow-md">
+            <CardHeader>
+                <CardTitle className="text-3xl">Random Quote</CardTitle>
+                <CardDescription>
+                    A random quote from dummyjson.com
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <blockquote className="text-lg">
+                    <span className="italic">"{quote}"</span>
+                    <footer className="pt-4 font-bold">{author}</footer>
+                </blockquote>
+            </CardContent>
+        </Card>
+    )
+}
+```
+
+> Note: To exclude `undefined` in the union type returned by `useQuery`, we provide an initial data to it. We accomplish it by taking it from `useLoaderData`.
+
+To learn more about hooks like `useQuery` and `useMutation`, check out the official [React Query documentation](https://tanstack.com/query/latest/docs/framework/react/quick-start).
+
+## Adding components
+
+The following command will add a `Button` component to your project.
+
+```sh
+pnpm dlx shadcn@latest add button
+```
+
+You can then import it like this:
+
+```ts
+// src/App.tsx
+import { Button } from "@/components/ui/button"
+
+function App() {
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center">
+      <Button>Click me</Button>
+    </div>
+  )
+}
+
+export default App
+```
+
+To learn more about the available components, how to add, import, and customize them, consult the [shadcn/ui documentation](https://ui.shadcn.com/docs/installation/vite#add-components).
