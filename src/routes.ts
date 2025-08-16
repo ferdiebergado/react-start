@@ -4,6 +4,8 @@ import Layout from './components/Layout'
 import NotFound from './components/NotFound'
 import Spinner from './components/Spinner'
 import Home from './Home'
+import { quoteLoader } from './home'
+import queryClient from './lib/queryClient'
 
 export const routes: RouteObject[] = [
     {
@@ -11,7 +13,9 @@ export const routes: RouteObject[] = [
         Component: Layout,
         ErrorBoundary: ErrorBoundary,
         HydrateFallback: Spinner,
-        children: [{ index: true, Component: Home }],
+        children: [
+            { index: true, Component: Home, loader: quoteLoader(queryClient) },
+        ],
     },
     {
         path: '*',
