@@ -12,7 +12,7 @@ import {
 } from 'vitest'
 import { render } from 'vitest-browser-react'
 
-describe('ThemeProvider', () => {
+describe('<ThemeProvider />', () => {
     const localStorageMock = (() => {
         let store: Record<string, string> = {}
         return {
@@ -81,20 +81,23 @@ describe('ThemeProvider', () => {
             )
         })
 
-        it('initializes with defaultTheme if localStorage is empty', async () => {
-            const { getByText } = render(
-                <ThemeProvider defaultTheme="light">
-                    <TestComponent />
-                </ThemeProvider>
-            )
+        it.concurrent(
+            'initializes with defaultTheme if localStorage is empty',
+            async () => {
+                const { getByText } = render(
+                    <ThemeProvider defaultTheme="light">
+                        <TestComponent />
+                    </ThemeProvider>
+                )
 
-            await expect
-                .element(getByText('Current theme: light'))
-                .toBeInTheDocument()
-            expect(document.documentElement.classList.contains('light')).toBe(
-                true
-            )
-        })
+                await expect
+                    .element(getByText('Current theme: light'))
+                    .toBeInTheDocument()
+                expect(
+                    document.documentElement.classList.contains('light')
+                ).toBe(true)
+            }
+        )
     })
 
     describe('switching themes', () => {
@@ -123,36 +126,39 @@ describe('ThemeProvider', () => {
             )
         }
 
-        it('switches theme correctly and updates localStorage', async () => {
-            const { getByText } = render(
-                <ThemeProvider>
-                    <TestComponentWithControls />
-                </ThemeProvider>
-            )
+        it.concurrent(
+            'switches theme correctly and updates localStorage',
+            async () => {
+                const { getByText } = render(
+                    <ThemeProvider>
+                        <TestComponentWithControls />
+                    </ThemeProvider>
+                )
 
-            const darkButton = getByText('Set Dark')
-            await darkButton.click()
+                const darkButton = getByText('Set Dark')
+                await darkButton.click()
 
-            await expect
-                .element(getByText('Current theme: dark'))
-                .toBeInTheDocument()
-            expect(localStorage.getItem('vite-ui-theme')).toBe('dark')
-            expect(document.documentElement.classList.contains('dark')).toBe(
-                true
-            )
+                await expect
+                    .element(getByText('Current theme: dark'))
+                    .toBeInTheDocument()
+                expect(localStorage.getItem('vite-ui-theme')).toBe('dark')
+                expect(
+                    document.documentElement.classList.contains('dark')
+                ).toBe(true)
 
-            const lightButton = getByText('Set Light')
-            await lightButton.click()
+                const lightButton = getByText('Set Light')
+                await lightButton.click()
 
-            expect(getByText('Current theme: light')).toBeInTheDocument()
-            expect(localStorage.getItem('vite-ui-theme')).toBe('light')
-            expect(document.documentElement.classList.contains('light')).toBe(
-                true
-            )
-            expect(document.documentElement.classList.contains('dark')).toBe(
-                false
-            )
-        })
+                expect(getByText('Current theme: light')).toBeInTheDocument()
+                expect(localStorage.getItem('vite-ui-theme')).toBe('light')
+                expect(
+                    document.documentElement.classList.contains('light')
+                ).toBe(true)
+                expect(
+                    document.documentElement.classList.contains('dark')
+                ).toBe(false)
+            }
+        )
     })
 
     describe('system theme', () => {
@@ -195,33 +201,36 @@ describe('ThemeProvider', () => {
             )
         })
 
-        it('listens for and responds to system theme changes', () => {
-            const mockMatchMedia = createMatchMediaMock(true)
-            ;(window.matchMedia as Mock).mockImplementationOnce(
-                () => mockMatchMedia
-            )
+        it.concurrent(
+            'listens for and responds to system theme changes',
+            () => {
+                const mockMatchMedia = createMatchMediaMock(true)
+                ;(window.matchMedia as Mock).mockImplementationOnce(
+                    () => mockMatchMedia
+                )
 
-            render(
-                <ThemeProvider defaultTheme="system">
-                    <TestComponent />
-                </ThemeProvider>
-            )
+                render(
+                    <ThemeProvider defaultTheme="system">
+                        <TestComponent />
+                    </ThemeProvider>
+                )
 
-            expect(document.documentElement.classList.contains('dark')).toBe(
-                true
-            )
+                expect(
+                    document.documentElement.classList.contains('dark')
+                ).toBe(true)
 
-            const listener = mockMatchMedia.addEventListener.mock
-                .calls[0][1] as (e: MediaQueryListEvent) => void
+                const listener = mockMatchMedia.addEventListener.mock
+                    .calls[0][1] as (e: MediaQueryListEvent) => void
 
-            listener({ matches: false } as MediaQueryListEvent)
+                listener({ matches: false } as MediaQueryListEvent)
 
-            expect(document.documentElement.classList.contains('light')).toBe(
-                true
-            )
-            expect(document.documentElement.classList.contains('dark')).toBe(
-                false
-            )
-        })
+                expect(
+                    document.documentElement.classList.contains('light')
+                ).toBe(true)
+                expect(
+                    document.documentElement.classList.contains('dark')
+                ).toBe(false)
+            }
+        )
     })
 })
