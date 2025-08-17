@@ -14,7 +14,7 @@ A modern React SPA starter template with routing, data fetching, styling, and te
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
 - ⚛ **React** – Modern component architecture
-- 🛣 **React Router (Data mode)** – Config-based routing with loaders and actions
+- 🛣 **React Router** – Declarative routing
 - 🔍 **React Query** – Declarative server state management
 - 🎨 **Tailwind CSS** – Utility-first styling
 - 💅 **shadcn/ui** – Beautifully designed components built on top of Radix UI and Tailwind CSS
@@ -73,37 +73,20 @@ pnpm run preview
 
 ## Routing
 
-This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<RouterProvider>`, enabling declarative navigation between different pages.
+This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<BrowserRouter>`, enabling declarative navigation between different pages.
 
-All routes are defined in `src/routes.ts`.
-
-The `createBrowserRouter` function in `src/App.tsx` reads these routes.
-
-```ts
-// App.tsx
-import { routes } from './routes'
-
-const router = createBrowserRouter(routes)
+```html
+<BrowserRouter>
+    <Routes>
+        <Route element={<Layout />}>
+            <Route index element={<Home />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+    </Routes>
+</BrowserRouter>
 ```
 
-To create a route, add a route object to the `routes` array:
-
-```ts
-// src/routes.ts
-export const routes: RouteObject[] = [
-    {
-        path: '/',
-        Component: Layout,
-        ErrorBoundary: ErrorBoundary,
-        HydrateFallback: Spinner,
-        children: [{ index: true, Component: Home }],
-    },
-    {
-        path: '*',
-        Component: NotFound,
-    },
-]
-```
+To create a route, add a `Route` component as child of the `Routes` component:
 
 For a complete guide on defining routes and using hooks like `useNavigate`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
@@ -116,22 +99,36 @@ We utilize **React Query** for efficient server-state management. The `QueryClie
 import { QueryClient } from '@tanstack/react-query'
 
 export default new QueryClient()
-
-// src/App.tsx
-const App: FC = () => {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-        </QueryClientProvider>
-    )
-}
 ```
 
-To fetch data with React Query, create a loader function that takes a `QueryClient` as an argument. The loader function should return a function which in turn returns the result of the call to `ensureQueryData` on the queryClient.
+```html
+<!-- src/App.tsx -->
+<QueryClientProvider client={queryClient}>
+    <QueryErrorResetBoundary>
+        {({ reset }) => (
+            <ErrorBoundary
+                fallbackRender={fallbackRender}
+                onReset={reset}
+            >
+                <BrowserRouter>
+                    <Routes>
+                        <Route element={<Layout />}>
+                            <Route index element={<Home />} />
+                        </Route>
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </BrowserRouter>
+            </ErrorBoundary>
+        )}
+    </QueryErrorResetBoundary>
+</QueryClientProvider>
+```
+
+To fetch data with React Query, first create a custom hook that calls `useQuery` or `useSuspenseQuery`.
 
 ```ts
 // src/home.ts
-interface Quote {
+export interface Quote {
     id: number
     quote: string
     author: string
@@ -139,6 +136,7 @@ interface Quote {
 
 async function fetchRandomQuote(): Promise<Quote> {
     const res = await fetch('https://dummyjson.com/quotes/random')
+    if (!res.ok) throw new Error(res.statusText)
     return (await res.json()) as Quote
 }
 
@@ -147,68 +145,42 @@ export const quoteQuery = queryOptions({
     queryFn: fetchRandomQuote,
 })
 
-export function quoteLoader(queryClient: QueryClient) {
-    return async function () {
-        return await queryClient.ensureQueryData(quoteQuery)
-    }
+export function useQuoteQuery() {
+    return useSuspenseQuery(quoteQuery)
 }
 ```
 
-Next, add the loader to the loader key of the route object in `src/routes.ts`.
-
-```ts
-// src/routes.ts
-export const routes: RouteObject[] = [
-    {
-        path: '/',
-        Component: Layout,
-        ErrorBoundary: ErrorBoundary,
-        HydrateFallback: Spinner,
-        children: [
-            { index: true, Component: Home, loader: quoteLoader(queryClient) },
-        ],
-    },
-    {
-        path: '*',
-        Component: NotFound,
-    },
-]
-```
-
-Finally, call `useQuery` on the component to make the fetched data available to it.
+Then, call the custom hook on the component to make the fetched data available to it.
 
 ```ts
 // src/Home.tsx
 const Home: FC = () => {
-    const initialData = useLoaderData<Awaited<ReturnType<typeof quoteLoader>>>()
-
     const {
         data: { quote, author },
-    } = useQuery({
-        ...quoteQuery,
-        initialData,
-    })
+    } = useQuoteQuery()
 
     return (
         <Card className="m-16 shadow-md">
             <CardHeader>
                 <CardTitle className="text-3xl">Random Quote</CardTitle>
                 <CardDescription>
-                    A random quote from dummyjson.com
+                    A demo of data fetching using React Query
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <blockquote className="text-lg">
-                    <span className="italic">"{quote}"</span>
-                    <footer className="pt-4 font-bold">{author}</footer>
-                </blockquote>
+                <Suspense fallback={<SuspenseFallback />}>
+                    <blockquote>
+                        <span className="text-lg italic">"{quote}"</span>
+                        <footer className="pt-4 text-xl font-bold">
+                            {author}
+                        </footer>
+                    </blockquote>
+                </Suspense>
             </CardContent>
         </Card>
     )
 }
 ```
-
-> Note: To exclude `undefined` in the union type returned by `useQuery`, we provide an initial data to it. We accomplish it by taking it from `useLoaderData`.
 
 To learn more about hooks like `useQuery` and `useMutation`, check out the official [React Query documentation](https://tanstack.com/query/latest/docs/framework/react/quick-start).
 
