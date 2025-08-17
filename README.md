@@ -75,7 +75,7 @@ pnpm run preview
 
 This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<BrowserRouter>`, enabling declarative navigation between different pages.
 
-```html
+```tsx
 <BrowserRouter>
     <Routes>
         <Route element={<Layout />}>
@@ -88,40 +88,38 @@ This starter kit uses **React Router** for handling all client-side routing. The
 
 To create a route, add a `Route` component as child of the `Routes` component:
 
+```tsx
+<Route path="about" element={<About />} />
+```
+
 For a complete guide on defining routes and using hooks like `useNavigate`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
 ## Data fetching
 
 We utilize **React Query** for efficient server-state management. The `QueryClient` is globally configured and wrapped around the application to provide a simple API for fetching, caching, and updating data.
 
-```ts
-// src/lib/queryClient.ts
-import { QueryClient } from '@tanstack/react-query'
+```tsx
+// src/App.tsx
+const queryClient = new QueryClient()
 
-export default new QueryClient()
-```
-
-```html
-<!-- src/App.tsx -->
-<QueryClientProvider client={queryClient}>
-    <QueryErrorResetBoundary>
-        {({ reset }) => (
-            <ErrorBoundary
-                fallbackRender={fallbackRender}
-                onReset={reset}
-            >
-                <BrowserRouter>
-                    <Routes>
-                        <Route element={<Layout />}>
-                            <Route index element={<Home />} />
-                        </Route>
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </BrowserRouter>
-            </ErrorBoundary>
-        )}
-    </QueryErrorResetBoundary>
-</QueryClientProvider>
+return (
+    <QueryClientProvider client={queryClient}>
+        <QueryErrorResetBoundary>
+            {({ reset }) => (
+                <ErrorBoundary fallbackRender={fallbackRender} onReset={reset}>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route element={<Layout />}>
+                                <Route index element={<Home />} />
+                            </Route>
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                    </BrowserRouter>
+                </ErrorBoundary>
+            )}
+        </QueryErrorResetBoundary>
+    </QueryClientProvider>
+)
 ```
 
 To fetch data with React Query, first create a custom hook that calls `useQuery` or `useSuspenseQuery`.
@@ -152,7 +150,7 @@ export function useQuoteQuery() {
 
 Then, call the custom hook on the component to make the fetched data available to it.
 
-```ts
+```tsx
 // src/Home.tsx
 const Home: FC = () => {
     const {
@@ -194,16 +192,16 @@ pnpm dlx shadcn@latest add button
 
 You can then import it like this:
 
-```ts
+```tsx
 // src/App.tsx
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 
 function App() {
-  return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button>Click me</Button>
-    </div>
-  )
+    return (
+        <div className="flex min-h-svh flex-col items-center justify-center">
+            <Button>Click me</Button>
+        </div>
+    )
 }
 
 export default App
