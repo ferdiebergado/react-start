@@ -1,15 +1,55 @@
-import { QueryClientProvider } from '@tanstack/react-query'
-import { type FC } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router'
-import queryClient from './lib/queryClient'
-import { routes } from './routes'
-
-const router = createBrowserRouter(routes)
+import Layout from '@/components/Layout'
+import NotFound from '@/components/NotFound'
+import { Button } from '@/components/ui/button'
+import Home from '@/Home'
+import queryClient from '@/lib/queryClient'
+import {
+    QueryClientProvider,
+    QueryErrorResetBoundary,
+} from '@tanstack/react-query'
+import { type FC, type ReactNode } from 'react'
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
+import { BrowserRouter, Route, Routes } from 'react-router'
 
 const App: FC = () => {
+    const fallbackRender: (props: FallbackProps) => ReactNode = ({
+        error,
+        resetErrorBoundary,
+    }) => (
+        <div>
+            There was an error!{' '}
+            <Button
+                onClick={() => {
+                    resetErrorBoundary()
+                }}
+            >
+                Try again
+            </Button>
+            <pre style={{ whiteSpace: 'normal' }}>
+                {(error as Error).message}
+            </pre>
+        </div>
+    )
+
     return (
         <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
+            <QueryErrorResetBoundary>
+                {({ reset }) => (
+                    <ErrorBoundary
+                        fallbackRender={fallbackRender}
+                        onReset={reset}
+                    >
+                        <BrowserRouter>
+                            <Routes>
+                                <Route element={<Layout />}>
+                                    <Route index element={<Home />} />
+                                </Route>
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </BrowserRouter>
+                    </ErrorBoundary>
+                )}
+            </QueryErrorResetBoundary>
         </QueryClientProvider>
     )
 }

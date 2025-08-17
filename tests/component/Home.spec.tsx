@@ -1,33 +1,43 @@
+import type { Quote } from '@/home'
 import Home from '@/Home'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createRoutesStub } from 'react-router'
-import { describe, expect, it, vi } from 'vitest'
+import { MemoryRouter, Route, Routes } from 'react-router'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 
-const mockQuote = {
-    quote: 'Stay hungry, stay foolish.',
-    author: 'Steve Jobs',
-}
-
-vi.mock('@/home/useQuoteQuery', () => ({
-    useQuoteQuery: () => ({ data: mockQuote }),
-}))
-
 describe('<Home />', () => {
-    it('renders quote and author', async () => {
-        const queryClient = new QueryClient()
+    const mockQuote: Quote = {
+        id: 1,
+        quote: 'Stay hungry, stay foolish.',
+        author: 'Steve Jobs',
+    }
 
-        const StubRouter = createRoutesStub([
-            {
-                path: '/',
-                Component: Home,
-                loader: () => mockQuote,
-            },
-        ])
+    beforeAll(() => {
+        vi.stubGlobal(
+            'fetch',
+            vi.fn(() =>
+                Promise.resolve({
+                    ok: true,
+                    json: () => Promise.resolve(mockQuote),
+                })
+            )
+        )
+    })
+
+    afterAll(() => {
+        vi.unstubAllGlobals()
+    })
+
+    it.concurrent('renders quote and author', async () => {
+        const queryClient = new QueryClient()
 
         const { getByText } = render(
             <QueryClientProvider client={queryClient}>
-                <StubRouter initialEntries={['/']} />
+                <MemoryRouter initialEntries={['/']}>
+                    <Routes>
+                        <Route index element={<Home />} />
+                    </Routes>
+                </MemoryRouter>
             </QueryClientProvider>
         )
 

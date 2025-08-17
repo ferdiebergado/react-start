@@ -1,6 +1,6 @@
-import { QueryClient, queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
-interface Quote {
+export interface Quote {
     id: number
     quote: string
     author: string
@@ -8,6 +8,7 @@ interface Quote {
 
 async function fetchRandomQuote(): Promise<Quote> {
     const res = await fetch('https://dummyjson.com/quotes/random')
+    if (!res.ok) throw new Error(res.statusText)
     return (await res.json()) as Quote
 }
 
@@ -16,15 +17,6 @@ export const quoteQuery = queryOptions({
     queryFn: fetchRandomQuote,
 })
 
-export function useQuoteQuery(initialData: Quote) {
-    return useQuery({
-        ...quoteQuery,
-        initialData,
-    })
-}
-
-export function quoteLoader(queryClient: QueryClient) {
-    return async function () {
-        return await queryClient.ensureQueryData(quoteQuery)
-    }
+export function useQuoteQuery() {
+    return useSuspenseQuery(quoteQuery)
 }
