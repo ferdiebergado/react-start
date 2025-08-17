@@ -2,8 +2,8 @@ import Layout from '@/components/Layout'
 import NotFound from '@/components/NotFound'
 import { Button } from '@/components/ui/button'
 import Home from '@/Home'
-import queryClient from '@/lib/queryClient'
 import {
+    QueryClient,
     QueryClientProvider,
     QueryErrorResetBoundary,
 } from '@tanstack/react-query'
@@ -12,6 +12,8 @@ import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import { BrowserRouter, Route, Routes } from 'react-router'
 
 const App: FC = () => {
+    const queryClient = new QueryClient()
+
     const fallbackRender: (props: FallbackProps) => ReactNode = ({
         error,
         resetErrorBoundary,
