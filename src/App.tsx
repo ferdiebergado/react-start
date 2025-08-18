@@ -1,9 +1,7 @@
-import Layout from '@/components/Layout'
-import NotFound from '@/components/NotFound'
 import Spinner from '@/components/Spinner'
 import ThemeProvider from '@/components/ThemeProvider'
 import { Button } from '@/components/ui/button'
-import Home from '@/Home'
+import Router from '@/router'
 import {
     QueryClient,
     QueryClientProvider,
@@ -11,7 +9,6 @@ import {
 } from '@tanstack/react-query'
 import { Suspense, type FC, type ReactNode } from 'react'
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
-import { BrowserRouter, Route, Routes } from 'react-router'
 
 const queryClient = new QueryClient()
 
@@ -45,17 +42,7 @@ const App: FC = () => {
                     >
                         <ThemeProvider>
                             <Suspense fallback={<Spinner />}>
-                                <BrowserRouter>
-                                    <Routes>
-                                        <Route element={<Layout />}>
-                                            <Route index element={<Home />} />
-                                        </Route>
-                                        <Route
-                                            path="*"
-                                            element={<NotFound />}
-                                        />
-                                    </Routes>
-                                </BrowserRouter>
+                                <Router />
                             </Suspense>
                         </ThemeProvider>
                     </ErrorBoundary>
