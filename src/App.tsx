@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout'
 import NotFound from '@/components/NotFound'
+import ThemeProvider from '@/components/ThemeProvider'
 import { Button } from '@/components/ui/button'
 import Home from '@/Home'
 import {
@@ -11,9 +12,9 @@ import { type FC, type ReactNode } from 'react'
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import { BrowserRouter, Route, Routes } from 'react-router'
 
-const App: FC = () => {
-    const queryClient = new QueryClient()
+const queryClient = new QueryClient()
 
+const App: FC = () => {
     const fallbackRender: (props: FallbackProps) => ReactNode = ({
         error,
         resetErrorBoundary,
@@ -41,14 +42,16 @@ const App: FC = () => {
                         fallbackRender={fallbackRender}
                         onReset={reset}
                     >
-                        <BrowserRouter>
-                            <Routes>
-                                <Route element={<Layout />}>
-                                    <Route index element={<Home />} />
-                                </Route>
-                                <Route path="*" element={<NotFound />} />
-                            </Routes>
-                        </BrowserRouter>
+                        <ThemeProvider>
+                            <BrowserRouter>
+                                <Routes>
+                                    <Route element={<Layout />}>
+                                        <Route index element={<Home />} />
+                                    </Route>
+                                    <Route path="*" element={<NotFound />} />
+                                </Routes>
+                            </BrowserRouter>
+                        </ThemeProvider>
                     </ErrorBoundary>
                 )}
             </QueryErrorResetBoundary>
