@@ -1,12 +1,11 @@
 import {
     NavigationMenu,
     NavigationMenuItem,
-    NavigationMenuLink,
     NavigationMenuList,
 } from '@/components/ui/navigation-menu'
 import type { FC } from 'react'
-import { NavLink } from 'react-router'
 import ModeToggle from './ModeToggle'
+import NavigationLink from './NavigationLink'
 
 const Header: FC = () => {
     return (
@@ -14,18 +13,14 @@ const Header: FC = () => {
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
-                        <NavigationMenuLink asChild>
-                            <NavLink to="/" end>
-                                Home
-                            </NavLink>
-                        </NavigationMenuLink>
+                        <NavigationLink to="/" end>
+                            Home
+                        </NavigationLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationMenuLink asChild>
-                            <NavLink to="/about" end>
-                                About
-                            </NavLink>
-                        </NavigationMenuLink>
+                        <NavigationLink to="/about" end>
+                            About
+                        </NavigationLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <ModeToggle />
