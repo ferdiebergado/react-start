@@ -75,6 +75,8 @@ pnpm run preview
 
 This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<BrowserRouter>`, enabling declarative navigation between different pages.
 
+To create a route, add a `Route` component as child of the `Routes` component:
+
 ```tsx
 <BrowserRouter>
     <Routes>
@@ -86,12 +88,6 @@ This starter kit uses **React Router** for handling all client-side routing. The
 </BrowserRouter>
 ```
 
-To create a route, add a `Route` component as child of the `Routes` component:
-
-```tsx
-<Route path="about" element={<About />} />
-```
-
 For a complete guide on defining routes and using hooks like `useNavigate`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
 ## Data fetching
@@ -100,26 +96,61 @@ We utilize **React Query** for efficient server-state management. The `QueryClie
 
 ```tsx
 // src/App.tsx
+import Spinner from '@/components/Spinner'
+import ThemeProvider from '@/components/ThemeProvider'
+import { Button } from '@/components/ui/button'
+import Router from '@/router'
+import {
+    QueryClient,
+    QueryClientProvider,
+    QueryErrorResetBoundary,
+} from '@tanstack/react-query'
+import { Suspense, type FC, type ReactNode } from 'react'
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
+
 const queryClient = new QueryClient()
 
-return (
-    <QueryClientProvider client={queryClient}>
-        <QueryErrorResetBoundary>
-            {({ reset }) => (
-                <ErrorBoundary fallbackRender={fallbackRender} onReset={reset}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route element={<Layout />}>
-                                <Route index element={<Home />} />
-                            </Route>
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </BrowserRouter>
-                </ErrorBoundary>
-            )}
-        </QueryErrorResetBoundary>
-    </QueryClientProvider>
-)
+const App: FC = () => {
+    const fallbackRender: (props: FallbackProps) => ReactNode = ({
+        error,
+        resetErrorBoundary,
+    }) => (
+        <div>
+            There was an error!{' '}
+            <Button
+                onClick={() => {
+                    resetErrorBoundary()
+                }}
+            >
+                Try again
+            </Button>
+            <pre style={{ whiteSpace: 'normal' }}>
+                {(error as Error).message}
+            </pre>
+        </div>
+    )
+
+    return (
+        <QueryClientProvider client={queryClient}>
+            <QueryErrorResetBoundary>
+                {({ reset }) => (
+                    <ErrorBoundary
+                        fallbackRender={fallbackRender}
+                        onReset={reset}
+                    >
+                        <ThemeProvider>
+                            <Suspense fallback={<Spinner />}>
+                                <Router />
+                            </Suspense>
+                        </ThemeProvider>
+                    </ErrorBoundary>
+                )}
+            </QueryErrorResetBoundary>
+        </QueryClientProvider>
+    )
+}
+
+export default App
 ```
 
 To fetch data with React Query, first create a custom hook that calls `useQuery` or `useSuspenseQuery`.
@@ -208,3 +239,7 @@ export default App
 ```
 
 To learn more about the available components, how to add, import, and customize them, consult the [shadcn/ui documentation](https://ui.shadcn.com/docs/installation/vite#add-components).
+
+## Screenshot
+
+![screenshot1](/screenshot.png)
