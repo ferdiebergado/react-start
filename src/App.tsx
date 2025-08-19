@@ -1,43 +1,24 @@
+import FallbackRender from '@/components/ErrorFallback'
 import Spinner from '@/components/Spinner'
 import ThemeProvider from '@/components/ThemeProvider'
-import { Button } from '@/components/ui/button'
 import Router from '@/router'
 import {
     QueryClient,
     QueryClientProvider,
     QueryErrorResetBoundary,
 } from '@tanstack/react-query'
-import { Suspense, type FC, type ReactNode } from 'react'
-import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
+import { Suspense, type FC } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 const queryClient = new QueryClient()
 
 const App: FC = () => {
-    const fallbackRender: (props: FallbackProps) => ReactNode = ({
-        error,
-        resetErrorBoundary,
-    }) => (
-        <div>
-            There was an error!{' '}
-            <Button
-                onClick={() => {
-                    resetErrorBoundary()
-                }}
-            >
-                Try again
-            </Button>
-            <pre style={{ whiteSpace: 'normal' }}>
-                {(error as Error).message}
-            </pre>
-        </div>
-    )
-
     return (
         <QueryClientProvider client={queryClient}>
             <QueryErrorResetBoundary>
                 {({ reset }) => (
                     <ErrorBoundary
-                        fallbackRender={fallbackRender}
+                        fallbackRender={FallbackRender}
                         onReset={reset}
                     >
                         <ThemeProvider>
