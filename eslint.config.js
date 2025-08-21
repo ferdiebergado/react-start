@@ -1,6 +1,7 @@
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import eslintConfigPrettier from 'eslint-config-prettier/flat'
+import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import noBarrelFiles from 'eslint-plugin-no-barrel-files'
 import reactDom from 'eslint-plugin-react-dom'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -24,6 +25,7 @@ export default tseslint.config([
             reactDom.configs.recommended,
             ...pluginQuery.configs['flat/recommended'],
             noBarrelFiles.flat,
+            eslintPluginJsxA11y.flatConfigs.recommended,
             eslintConfigPrettier,
         ],
         languageOptions: {
