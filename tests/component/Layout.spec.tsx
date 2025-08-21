@@ -19,7 +19,8 @@ describe('<Layout />', () => {
         const main = getByRole('main')
         await expect.element(main).toBeInTheDocument()
 
-        const footer = getByText(/2025 by ferdie bergado/i)
+        const year = new Date().getFullYear()
+        const footer = getByText(year.toString())
         await expect.element(footer).toBeVisible()
     })
 })
