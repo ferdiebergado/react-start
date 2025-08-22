@@ -75,7 +75,7 @@ pnpm run preview
 
 This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<BrowserRouter>`, enabling declarative navigation between different pages.
 
-To create a route, add a `Route` component as child of the `Routes` component:
+All the routes are found in `router.tsx`. To create a route, add a `Route` component as child of the `Routes` component:
 
 ```tsx
 <BrowserRouter>
@@ -88,7 +88,7 @@ To create a route, add a `Route` component as child of the `Routes` component:
 </BrowserRouter>
 ```
 
-For a complete guide on defining routes and using hooks like `useNavigate`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
+For a complete guide on defining routes and using hooks like `useLocation`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
 ## Data fetching
 
