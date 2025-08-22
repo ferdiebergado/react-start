@@ -4,7 +4,7 @@ import {
     type Theme,
     type ThemeProviderProps,
 } from '@/lib/theme'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
     children,
@@ -56,16 +56,13 @@ const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
         root.classList.add(theme)
     }, [theme])
 
-    const value = useMemo(
-        () => ({
-            theme,
-            setTheme: (newTheme: Theme) => {
-                localStorage.setItem(storageKey, newTheme)
-                setTheme(newTheme)
-            },
-        }),
-        [storageKey, theme]
-    )
+    const value = {
+        theme,
+        setTheme: (newTheme: Theme) => {
+            localStorage.setItem(storageKey, newTheme)
+            setTheme(newTheme)
+        },
+    }
 
     return (
         <ThemeProviderContext {...props} value={value}>
