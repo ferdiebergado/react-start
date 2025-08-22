@@ -26,7 +26,8 @@ A modern React SPA starter template with routing, data fetching, styling, and te
 
 ## Features
 
-- Dark mode support
+- React Compiler enabled
+- Theme switcher
 
 ## Requirements
 
