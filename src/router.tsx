@@ -1,8 +1,9 @@
 import Layout from '@/components/Layout'
-import NotFound from '@/components/NotFound'
-import Home from '@/Home'
-import { type FC } from 'react'
+import { lazy, type FC } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
+
+const Home = lazy(() => import('@/Home'))
+const NotFound = lazy(() => import('@/components/NotFound'))
 
 const Router: FC = () => {
     return (
