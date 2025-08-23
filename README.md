@@ -76,7 +76,7 @@ pnpm run preview
 
 This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<BrowserRouter>`, enabling declarative navigation between different pages.
 
-All the routes are found in `router.tsx`. To create a route, add a `Route` component as child of the `Routes` component:
+All routes are defined in `router.tsx`. To create a route, add a `Route` component as child of the `Routes` component:
 
 ```tsx
 <BrowserRouter>
@@ -97,52 +97,30 @@ We utilize **React Query** for efficient server-state management. The `QueryClie
 
 ```tsx
 // src/App.tsx
-import Spinner from '@/components/Spinner'
+import FallbackRender from '@/components/ErrorFallback'
 import ThemeProvider from '@/components/ThemeProvider'
-import { Button } from '@/components/ui/button'
 import Router from '@/router'
 import {
     QueryClient,
     QueryClientProvider,
     QueryErrorResetBoundary,
 } from '@tanstack/react-query'
-import { Suspense, type FC, type ReactNode } from 'react'
-import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
+import { type FC } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 const queryClient = new QueryClient()
 
 const App: FC = () => {
-    const fallbackRender: (props: FallbackProps) => ReactNode = ({
-        error,
-        resetErrorBoundary,
-    }) => (
-        <div>
-            There was an error!{' '}
-            <Button
-                onClick={() => {
-                    resetErrorBoundary()
-                }}
-            >
-                Try again
-            </Button>
-            <pre style={{ whiteSpace: 'normal' }}>
-                {(error as Error).message}
-            </pre>
-        </div>
-    )
-
     return (
         <QueryClientProvider client={queryClient}>
             <QueryErrorResetBoundary>
                 {({ reset }) => (
                     <ErrorBoundary
-                        fallbackRender={fallbackRender}
+                        fallbackRender={FallbackRender}
                         onReset={reset}
                     >
                         <ThemeProvider>
-                            <Suspense fallback={<Spinner />}>
-                                <Router />
-                            </Suspense>
+                            <Router />
                         </ThemeProvider>
                     </ErrorBoundary>
                 )}
@@ -184,6 +162,16 @@ Then, call the custom hook on the component to make the fetched data available t
 
 ```tsx
 // src/Home.tsx
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card'
+import { useQuoteQuery } from '@/home'
+import type { FC } from 'react'
+
 const Home: FC = () => {
     const {
         data: { quote, author },
@@ -198,18 +186,16 @@ const Home: FC = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Suspense fallback={<SuspenseFallback />}>
-                    <blockquote>
-                        <span className="text-lg italic">"{quote}"</span>
-                        <footer className="pt-4 text-xl font-bold">
-                            {author}
-                        </footer>
-                    </blockquote>
-                </Suspense>
+                <blockquote>
+                    <span className="text-lg italic">"{quote}"</span>
+                    <footer className="pt-4 text-xl font-bold">{author}</footer>
+                </blockquote>
             </CardContent>
         </Card>
     )
 }
+
+export default Home
 ```
 
 To learn more about hooks like `useQuery` and `useMutation`, check out the official [React Query documentation](https://tanstack.com/query/latest/docs/framework/react/quick-start).
