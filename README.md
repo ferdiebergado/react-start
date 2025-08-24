@@ -120,7 +120,7 @@ We utilize **React Query** for efficient server-state management. The `QueryClie
 
 ```tsx
 // src/App.tsx
-import FallbackRender from '@/components/ErrorFallback'
+import ErrorFallback from '@/components/ErrorFallback'
 import ThemeProvider from '@/components/ThemeProvider'
 import Router from '@/router'
 import {
@@ -139,7 +139,7 @@ const App: FC = () => {
             <QueryErrorResetBoundary>
                 {({ reset }) => (
                     <ErrorBoundary
-                        fallbackRender={FallbackRender}
+                        FallbackComponent={ErrorFallback}
                         onReset={reset}
                     >
                         <ThemeProvider>
@@ -290,4 +290,4 @@ To learn more about the available components, how to add, import, and customize 
 - Client State Management: [zustand](https://zustand-demo.pmnd.rs)
 - Detect Performance Issues: [react-scan](https://react-scan.com)
 - Accessibility Testing: [react-axe](https://www.npmjs.com/package/@axe-core/react)
-- Design shadcn/ui theme: [tweakcn] (https://tweakcn.com)
+- Design shadcn/ui theme: [tweakcn](https://tweakcn.com)
