@@ -150,7 +150,7 @@ export default App
 To fetch data with React Query, first create a custom hook that calls `useQuery` or `useSuspenseQuery`.
 
 ```ts
-// src/home.ts
+// src/features/quote/index.ts
 export interface Quote {
     id: number
     quote: string
