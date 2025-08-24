@@ -5,14 +5,11 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { useQuoteQuery } from '@/home'
-import type { FC } from 'react'
+import RandomQuote from '@/features/quote/RandomQuote'
+import SuspenseFallback from '@/features/quote/SuspenseFallback'
+import { Suspense, type FC } from 'react'
 
 const Home: FC = () => {
-    const {
-        data: { quote, author },
-    } = useQuoteQuery()
-
     return (
         <Card className="m-16 shadow-md">
             <CardHeader>
@@ -22,10 +19,9 @@ const Home: FC = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <blockquote>
-                    <span className="text-lg italic">"{quote}"</span>
-                    <footer className="pt-4 text-xl font-bold">{author}</footer>
-                </blockquote>
+                <Suspense fallback={<SuspenseFallback />}>
+                    <RandomQuote />
+                </Suspense>
             </CardContent>
         </Card>
     )

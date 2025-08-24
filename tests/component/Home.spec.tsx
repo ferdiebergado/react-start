@@ -1,4 +1,4 @@
-import type { Quote } from '@/home'
+import type { Quote } from '@/features/quote'
 import Home from '@/Home'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter, Route, Routes } from 'react-router'

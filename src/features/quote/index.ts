@@ -12,11 +12,11 @@ async function fetchRandomQuote(): Promise<Quote> {
     return (await res.json()) as Quote
 }
 
-export const quoteQuery = queryOptions({
-    queryKey: ['random'],
+export const randomQuoteQuery = queryOptions({
+    queryKey: ['random_quote'],
     queryFn: fetchRandomQuote,
 })
 
-export function useQuoteQuery() {
-    return useSuspenseQuery(quoteQuery)
+export function useRandomQuote() {
+    return useSuspenseQuery(randomQuoteQuery)
 }
