@@ -285,8 +285,9 @@ To learn more about the available components, how to add, import, and customize 
 
     For scalability, we recommend that you organize your code into "features". Create a folder for your feature in the `src/features` folder and put all your code there.
 
-## Suggested libraries
+## Suggested libraries/tools
 
 - Client State Management: [zustand](https://zustand-demo.pmnd.rs)
 - Detect Performance Issues: [react-scan](https://react-scan.com)
 - Accessibility Testing: [react-axe](https://www.npmjs.com/package/@axe-core/react)
+- Design shadcn/ui theme: [tweakcn] (https://tweakcn.com)
