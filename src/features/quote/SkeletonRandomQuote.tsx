@@ -1,13 +1,14 @@
 import { Skeleton } from '@/components/ui/skeleton'
 import { type FC } from 'react'
 
-const SuspenseFallback: FC = () => {
+const SkeletonRandomQuote: FC = () => {
     return (
-        <div className="space-y-2">
+        <div className="space-y-4">
+            <Skeleton className="h-6 w-[500px]" />
             <Skeleton className="h-6 w-[500px]" />
             <Skeleton className="h-6 w-[200px]" />
         </div>
     )
 }
 
-export default SuspenseFallback
+export default SkeletonRandomQuote

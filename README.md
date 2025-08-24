@@ -216,7 +216,7 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import RandomQuote from '@/features/quote/RandomQuote'
-import SuspenseFallback from '@/features/quote/SuspenseFallback'
+import SkeletonRandomQuote from '@/features/quote/SkeletonRandomQuote'
 import { Suspense, type FC } from 'react'
 
 const Home: FC = () => {
@@ -229,7 +229,7 @@ const Home: FC = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Suspense fallback={<SuspenseFallback />}>
+                <Suspense fallback={<SkeletonRandomQuote />}>
                     <RandomQuote />
                 </Suspense>
             </CardContent>
