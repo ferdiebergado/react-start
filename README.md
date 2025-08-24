@@ -26,7 +26,7 @@ A modern React SPA starter template with routing, data fetching, styling, and te
 
 ## Features
 
-- React Compiler enabled
+- [React Compiler](https://react.dev/learn/react-compiler) enabled
 - Theme switcher
 
 ## Requirements
@@ -76,10 +76,6 @@ pnpm run preview
 
 This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<BrowserRouter>`, enabling declarative navigation between different pages.
 
-### Adding new routes
-
-All routes are defined in `router.tsx`. To create a route, add a `Route` component as child of the `Routes` component:
-
 ```tsx
 <BrowserRouter>
     <Routes>
@@ -91,9 +87,21 @@ All routes are defined in `router.tsx`. To create a route, add a `Route` compone
 </BrowserRouter>
 ```
 
+### Adding new routes
+
+All routes are defined in `router.tsx`. To create a route, add a `Route` component as child of the `Routes` component:
+
+```tsx
+<Routes>
+  // existing routes...
+  // a new route
+  <Route path="/about" element={<About />}>
+</Routes>
+```
+
 ### Lazy loading components
 
-To lazy load components, dynamically import components with the `lazy` function from react. Then, set the lazy-loaded component as the value of the element prop of the `Route` component.
+Deferring the loading of component’s code until it is rendered for the first time improves performance. To lazy load components, dynamically import components with the `lazy` function from react. Then, set the lazy-loaded component as the value of the element prop of the `Route` component.
 
 ```tsx
 const Home = lazy(() => import('@/Home'))
@@ -102,7 +110,7 @@ const Home = lazy(() => import('@/Home'))
 <Route index element={<Home />} />
 ```
 
-> **Tip:** _Always use absolute paths with path alias when importing for better maintainability._
+> **Tip:** _Always use absolute paths with path alias when importing for better maintainability. The `@` alias is preconfigured to point to the `src` folder._
 
 For a complete guide on defining routes and using hooks like `useLocation`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
@@ -176,6 +184,29 @@ export function useRandomQuote() {
 Then, call the custom hook on the component to make the fetched data available to it.
 
 ```tsx
+// src/features/quote/RandomQuote.tsx
+import { useRandomQuote } from '@/features/quote'
+import type { FC } from 'react'
+
+const RandomQuote: FC = () => {
+    const {
+        data: { quote, author },
+    } = useRandomQuote()
+
+    return (
+        <blockquote>
+            <span className="text-lg italic">"{quote}"</span>
+            <footer className="pt-4 text-xl font-bold">{author}</footer>
+        </blockquote>
+    )
+}
+
+export default RandomQuote
+```
+
+When using `useSuspenseQuery`, wrap your component that calls it with a `Suspense` boundary.
+
+```tsx
 // src/Home.tsx
 import {
     Card,
@@ -208,6 +239,8 @@ const Home: FC = () => {
 
 export default Home
 ```
+
+> **Tip**: _Structure your component atomically (smallest possible component) to prevent unnecessary re-renders. React Compiler can't help you if your components are not well-structured._
 
 To learn more about hooks like `useQuery` and `useMutation`, check out the official [React Query documentation](https://tanstack.com/query/latest/docs/framework/react/quick-start).
 
