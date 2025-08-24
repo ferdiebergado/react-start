@@ -76,6 +76,8 @@ pnpm run preview
 
 This starter kit uses **React Router** for handling all client-side routing. The router is pre-configured to use a `<BrowserRouter>`, enabling declarative navigation between different pages.
 
+### Adding new routes
+
 All routes are defined in `router.tsx`. To create a route, add a `Route` component as child of the `Routes` component:
 
 ```tsx
@@ -88,6 +90,19 @@ All routes are defined in `router.tsx`. To create a route, add a `Route` compone
     </Routes>
 </BrowserRouter>
 ```
+
+### Lazy loading components
+
+To lazy load components, dynamically import components with the `lazy` function from react. Then, set the lazy-loaded component as the value of the element prop of the `Route` component.
+
+```tsx
+const Home = lazy(() => import('@/Home'))
+
+// BrowserRouter here...
+<Route index element={<Home />} />
+```
+
+> **Tip:** _Always use absolute paths with path alias when importing for better maintainability._
 
 For a complete guide on defining routes and using hooks like `useLocation`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
@@ -148,13 +163,13 @@ async function fetchRandomQuote(): Promise<Quote> {
     return (await res.json()) as Quote
 }
 
-export const quoteQuery = queryOptions({
-    queryKey: ['random'],
+export const randomQuoteQuery = queryOptions({
+    queryKey: ['random_quote'],
     queryFn: fetchRandomQuote,
 })
 
-export function useQuoteQuery() {
-    return useSuspenseQuery(quoteQuery)
+export function useRandomQuote() {
+    return useSuspenseQuery(randomQuoteQuery)
 }
 ```
 
@@ -169,14 +184,11 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { useQuoteQuery } from '@/home'
-import type { FC } from 'react'
+import RandomQuote from '@/features/quote/RandomQuote'
+import SuspenseFallback from '@/features/quote/SuspenseFallback'
+import { Suspense, type FC } from 'react'
 
 const Home: FC = () => {
-    const {
-        data: { quote, author },
-    } = useQuoteQuery()
-
     return (
         <Card className="m-16 shadow-md">
             <CardHeader>
@@ -186,10 +198,9 @@ const Home: FC = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <blockquote>
-                    <span className="text-lg italic">"{quote}"</span>
-                    <footer className="pt-4 text-xl font-bold">{author}</footer>
-                </blockquote>
+                <Suspense fallback={<SuspenseFallback />}>
+                    <RandomQuote />
+                </Suspense>
             </CardContent>
         </Card>
     )
@@ -229,4 +240,20 @@ To learn more about the available components, how to add, import, and customize 
 
 ## Screenshot
 
-![screenshot1](/screenshot.png)
+![screenshot](/screenshot.png)
+
+## FAQ
+
+- Why use **React Router** in `declarative mode`?
+
+    This template follows the principle of _separation of concerns_, thus, **React Router** is only used for handling client side routing, nothing else. For data fetching needs, **React Query** is integrated for that purpose.
+
+- Where to place my code?
+
+    For scalability, we recommend that you organize your code into "features". Create a folder for your feature in the `src/features` folder and put all your code there.
+
+## Suggested libraries
+
+- Client State Management: [zustand](https://zustand-demo.pmnd.rs)
+- Detect Performance Issues: [react-scan](https://react-scan.com)
+- Accessibility Testing: [react-axe](https://www.npmjs.com/package/@axe-core/react)
