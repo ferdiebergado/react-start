@@ -1,4 +1,4 @@
-import FallbackRender from '@/components/ErrorFallback'
+import ErrorFallback from '@/components/ErrorFallback'
 import ThemeProvider from '@/components/ThemeProvider'
 import Router from '@/router'
 import {
@@ -17,7 +17,7 @@ const App: FC = () => {
             <QueryErrorResetBoundary>
                 {({ reset }) => (
                     <ErrorBoundary
-                        fallbackRender={FallbackRender}
+                        FallbackComponent={ErrorFallback}
                         onReset={reset}
                     >
                         <ThemeProvider>

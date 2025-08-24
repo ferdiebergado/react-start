@@ -1,11 +1,8 @@
-import type { ReactNode } from 'react'
+import { Button } from '@/components/ui/button'
+import type { FC } from 'react'
 import type { FallbackProps } from 'react-error-boundary'
-import { Button } from './ui/button'
 
-const FallbackRender: (props: FallbackProps) => ReactNode = ({
-    error,
-    resetErrorBoundary,
-}) => (
+const ErrorFallback: FC<FallbackProps> = ({ error, resetErrorBoundary }) => (
     <div className="flex min-h-screen flex-col items-center justify-center">
         <h1 className="text-muted-foreground text-6xl">
             Something went wrong.
@@ -22,4 +19,4 @@ const FallbackRender: (props: FallbackProps) => ReactNode = ({
     </div>
 )
 
-export default FallbackRender
+export default ErrorFallback
