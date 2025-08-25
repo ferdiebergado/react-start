@@ -1,13 +1,9 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { cleanup, render } from 'vitest-browser-react'
+import { describe, expect, it, vi } from 'vitest'
+import { render } from 'vitest-browser-react'
 
 import ErrorFallback from '@/components/ErrorFallback'
 
-describe('FallbackRender', () => {
-    afterEach(() => {
-        cleanup()
-    })
-
+describe('ErrorFallback', () => {
     it('renders the error message and a "Try again" button', async () => {
         const mockError = new Error('Test error message')
         const mockResetErrorBoundary = vi.fn()
@@ -19,22 +15,20 @@ describe('FallbackRender', () => {
             />
         )
 
-        await expect
-            .element(
-                getByRole('heading', {
-                    name: /Something went wrong./i,
-                })
-            )
-            .toBeVisible()
+        const heading = getByRole('heading', {
+            name: /Something went wrong./i,
+        })
+        await expect.element(heading).toBeVisible()
 
-        expect(getByText(/Test error message/i)).toBeVisible()
+        const errorMsg = getByText(/Test error message/i)
+        await expect.element(errorMsg).toBeVisible()
 
-        const button = getByRole('button', {
+        const retryBtn = getByRole('button', {
             name: /Try again/i,
         })
-        expect(button).toBeVisible()
+        await expect.element(retryBtn).toBeVisible()
 
-        await button.click()
+        await retryBtn.click()
         expect(mockResetErrorBoundary).toHaveBeenCalledTimes(1)
     })
 })
