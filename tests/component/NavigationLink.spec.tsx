@@ -1,82 +1,73 @@
 import NavigationLink from '@/components/NavigationLink'
-import { Link } from '@radix-ui/react-navigation-menu'
-import { cloneElement, isValidElement, type ComponentProps } from 'react'
+import {
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuList,
+} from '@/components/ui/navigation-menu'
+import type { ReactNode } from 'react'
 import { MemoryRouter } from 'react-router'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 
-vi.mock('@/components/ui/navigation-menu', () => {
-    return {
-        NavigationMenuLink: ({
-            active,
-            children,
-            ...props
-        }: ComponentProps<typeof Link>) => {
-            if (isValidElement(children)) {
-                return (
-                    <div>
-                        {cloneElement(children, {
-                            'data-active': active ? 'true' : 'false',
-                            ...props,
-                        })}
-                    </div>
-                )
-            }
-            return <div>{children}</div>
-        },
-    }
-})
+function renderWithMenu(ui: ReactNode, initialEntries = ['/']) {
+    return render(
+        <MemoryRouter initialEntries={initialEntries}>
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem>{ui}</NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
+        </MemoryRouter>
+    )
+}
 
 describe('NavigationLink', () => {
     it('renders the NavLink component correctly', async () => {
-        const { getByRole } = render(
-            <MemoryRouter>
-                <NavigationLink to="/about">About</NavigationLink>
-            </MemoryRouter>
+        const { getByRole } = renderWithMenu(
+            <NavigationLink to="/" end>
+                Home
+            </NavigationLink>
         )
-        const linkElement = getByRole('link', { name: /about/i })
+        const linkElement = getByRole('link', { name: /home/i })
         await expect.element(linkElement).toBeVisible()
-        expect(linkElement).toHaveAttribute('href', '/about')
+        await expect.element(linkElement).toHaveAttribute('href', '/')
     })
 
     it('sets the data-active attribute to true when the path matches', async () => {
-        const { getByRole } = render(
-            <MemoryRouter initialEntries={['/dashboard']}>
-                <NavigationLink to="/dashboard">Dashboard</NavigationLink>
-            </MemoryRouter>
+        const { getByRole, debug } = renderWithMenu(
+            <NavigationLink to="/dashboard" end>
+                Dashboard
+            </NavigationLink>,
+            ['/dashboard']
         )
+        debug()
         const linkElement = getByRole('link', { name: /dashboard/i })
-        await expect.element(linkElement).toHaveAttribute('data-active', 'true')
+        await expect.element(linkElement).toHaveAttribute('data-active')
     })
 
     it('sets the data-active attribute to true when the path is a subpath', async () => {
-        const { getByRole } = render(
-            <MemoryRouter initialEntries={['/products/1']}>
-                <NavigationLink to="/products">Products</NavigationLink>
-            </MemoryRouter>
+        const { getByRole } = renderWithMenu(
+            <NavigationLink to="/products">Products</NavigationLink>,
+            ['/products/1']
         )
 
         const linkElement = getByRole('link', { name: /products/i })
-        await expect.element(linkElement).toHaveAttribute('data-active', 'true')
+        await expect.element(linkElement).toHaveAttribute('data-active')
     })
 
     it('sets the data-active attribute to false when the path does not match', async () => {
-        const { getByRole } = render(
-            <MemoryRouter initialEntries={['/settings']}>
-                <NavigationLink to="/dashboard">Dashboard</NavigationLink>
-            </MemoryRouter>
+        const { getByRole } = renderWithMenu(
+            <NavigationLink to="/dashboard">Dashboard</NavigationLink>,
+            ['/settings']
         )
         const linkElement = getByRole('link', { name: /dashboard/i })
-        await expect
-            .element(linkElement)
-            .toHaveAttribute('data-active', 'false')
+        await expect.element(linkElement).not.toHaveAttribute('data-active')
     })
 
     it('applies the correct CSS classes when the link is active', async () => {
-        const { getByRole } = render(
-            <MemoryRouter initialEntries={['/home']}>
-                <NavigationLink to="/home">Home</NavigationLink>
-            </MemoryRouter>
+        const { getByRole } = renderWithMenu(
+            <NavigationLink to="/">Home</NavigationLink>,
+            ['/']
         )
         const linkElement = getByRole('link', { name: /home/i })
         await expect
