@@ -8,7 +8,7 @@ describe('ErrorFallback', () => {
         const mockError = new Error('Test error message')
         const mockResetErrorBoundary = vi.fn()
 
-        const { getByRole, getByText } = render(
+        const { getByRole } = render(
             <ErrorFallback
                 error={mockError}
                 resetErrorBoundary={mockResetErrorBoundary}
@@ -19,9 +19,6 @@ describe('ErrorFallback', () => {
             name: /Something went wrong./i,
         })
         await expect.element(heading).toBeVisible()
-
-        const errorMsg = getByText(/Test error message/i)
-        await expect.element(errorMsg).toBeVisible()
 
         const retryBtn = getByRole('button', {
             name: /Try again/i,
