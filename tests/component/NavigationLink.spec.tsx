@@ -34,13 +34,12 @@ describe('NavigationLink', () => {
     })
 
     it('sets the data-active attribute to true when the path matches', async () => {
-        const { getByRole, debug } = renderWithMenu(
+        const { getByRole } = renderWithMenu(
             <NavigationLink to="/dashboard" end>
                 Dashboard
             </NavigationLink>,
             ['/dashboard']
         )
-        debug()
         const linkElement = getByRole('link', { name: /dashboard/i })
         await expect.element(linkElement).toHaveAttribute('data-active')
     })
