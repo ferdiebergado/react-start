@@ -3,7 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 
-describe('<Layout />', () => {
+describe('Layout', () => {
     it.concurrent('renders the layout', async () => {
         const { getByText, getByRole } = render(
             <MemoryRouter initialEntries={['/']}>

@@ -12,7 +12,7 @@ import {
 } from 'vitest'
 import { render } from 'vitest-browser-react'
 
-describe('<ThemeProvider />', () => {
+describe('ThemeProvider', () => {
     const localStorageMock = (() => {
         let store: Record<string, string> = {}
         return {

@@ -5,7 +5,7 @@ import { MemoryRouter, Route, Routes } from 'react-router'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 
-describe('<Home />', () => {
+describe('Home', () => {
     const mockQuote: Quote = {
         id: 1,
         quote: 'Stay hungry, stay foolish.',
