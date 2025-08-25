@@ -1,8 +1,12 @@
-import ErrorPage from '@/components/ErrorPage'
+import ErrorWrapper from '@/components/ErrorWrapper'
 import { type FC } from 'react'
 
 const NotFound: FC = () => {
-    return <ErrorPage msg="Page not found." />
+    return (
+        <ErrorWrapper>
+            <h1 className="text-muted-foreground text-6xl">Page not found.</h1>
+        </ErrorWrapper>
+    )
 }
 
 export default NotFound
