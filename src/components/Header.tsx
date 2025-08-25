@@ -1,11 +1,11 @@
+import ModeToggle from '@/components/ModeToggle'
+import NavigationLink from '@/components/NavigationLink'
 import {
     NavigationMenu,
     NavigationMenuItem,
     NavigationMenuList,
 } from '@/components/ui/navigation-menu'
 import type { FC } from 'react'
-import ModeToggle from './ModeToggle'
-import NavigationLink from './NavigationLink'
 
 const Header: FC = () => {
     return (
