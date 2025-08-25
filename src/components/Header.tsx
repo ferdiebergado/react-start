@@ -9,7 +9,7 @@ import type { FC } from 'react'
 
 const Header: FC = () => {
     return (
-        <header className="px-12 py-3 shadow-md dark:shadow-gray-600">
+        <header className="dark:shadow-accent-foreground px-12 py-3 shadow-md">
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
