@@ -45,7 +45,7 @@ const mockQuote = {
     author: 'Steve Jobs',
 }
 
-export const Success: Story = {
+export const Default: Story = {
     parameters: {
         msw: {
             handlers: [
