@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import eslintConfigPrettier from 'eslint-config-prettier/flat'
@@ -40,4 +43,4 @@ export default tseslint.config([
             'react-hooks/react-compiler': 'error',
         },
     },
-])
+], storybook.configs["flat/recommended"]);
