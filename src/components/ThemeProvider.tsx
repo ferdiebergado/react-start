@@ -6,24 +6,28 @@ import {
 } from '@/lib/theme'
 import { useEffect, useMemo, useState } from 'react'
 
+function loadSavedTheme(storageKey: string, defaultTheme: Theme): Theme {
+    const savedTheme = localStorage.getItem(storageKey)
+
+    let theme: Theme
+    if (savedTheme) {
+        theme = savedTheme as Theme
+    } else {
+        theme = defaultTheme
+    }
+
+    return theme
+}
+
 const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
     children,
     defaultTheme = 'system',
     storageKey = 'vite-ui-theme',
     ...props
 }: ThemeProviderProps) => {
-    const [theme, setTheme] = useState<Theme>(() => {
-        const savedTheme = localStorage.getItem(storageKey)
-
-        let theme: Theme
-        if (savedTheme) {
-            theme = savedTheme as Theme
-        } else {
-            theme = defaultTheme
-        }
-
-        return theme
-    })
+    const [theme, setTheme] = useState<Theme>(
+        loadSavedTheme(storageKey, defaultTheme)
+    )
 
     useEffect(() => {
         const root = window.document.documentElement
