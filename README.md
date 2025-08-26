@@ -291,3 +291,4 @@ To learn more about the available components, how to add, import, and customize 
 - Detect Performance Issues: [react-scan](https://react-scan.com)
 - Accessibility Testing: [react-axe](https://www.npmjs.com/package/@axe-core/react)
 - Design shadcn/ui theme: [tweakcn](https://tweakcn.com)
+- Shadcn form builder: [shadcn-form](https://www.shadcn-form.com)
