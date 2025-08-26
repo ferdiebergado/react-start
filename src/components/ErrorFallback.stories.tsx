@@ -1,0 +1,16 @@
+import type { Meta, StoryObj } from '@storybook/react-vite'
+
+import ErrorFallback from '@/components/ErrorFallback'
+import { fn } from 'storybook/internal/test'
+
+const meta = {
+    component: ErrorFallback,
+} satisfies Meta<typeof ErrorFallback>
+
+export default meta
+
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+    args: { error: null, resetErrorBoundary: fn() },
+}
