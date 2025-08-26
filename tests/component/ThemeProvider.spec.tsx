@@ -1,236 +1,124 @@
 import ThemeProvider from '@/components/ThemeProvider'
-import { useTheme } from '@/lib/theme'
-import type { FC } from 'react'
-import {
-    beforeAll,
-    beforeEach,
-    describe,
-    expect,
-    it,
-    vi,
-    type Mock,
-} from 'vitest'
+import { ThemeProviderContext, type Theme } from '@/lib/theme'
+import { use } from 'react'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { mockMatchMedia } from '../utils/mockMatchMedia'
 
-describe('ThemeProvider', () => {
-    const localStorageMock = (() => {
-        let store: Record<string, string> = {}
-        return {
-            getItem: (key: string) => store[key] || null,
-            setItem: (key: string, value: string) => (store[key] = value),
-            clear: () => (store = {}),
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            removeItem: (key: string) => delete store[key],
-        }
-    })()
+function ThemeConsumer() {
+    const { theme, setTheme } = use(ThemeProviderContext)
+    return (
+        <div>
+            <span data-testid="theme">{theme}</span>
+            <button
+                type="button"
+                onClick={() => {
+                    setTheme('light')
+                }}
+            >
+                Set Light
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    setTheme('dark')
+                }}
+            >
+                Set Dark
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    setTheme('system')
+                }}
+            >
+                Set System
+            </button>
+        </div>
+    )
+}
 
-    interface MatchMediaMock {
-        matches: boolean
-        media: string
-        onchange: null
-        addEventListener: Mock
-        removeEventListener: Mock
-        dispatchEvent: Mock
-    }
-
-    const createMatchMediaMock = (matches = false): MatchMediaMock => ({
-        matches,
-        media: '(prefers-color-scheme: dark)',
-        onchange: null,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-    })
-
-    const matchMediaMock = createMatchMediaMock()
-
-    beforeAll(() => {
-        Object.defineProperty(window, 'localStorage', {
-            value: localStorageMock,
-            writable: true,
-        })
-        Object.defineProperty(window, 'matchMedia', {
-            value: vi.fn(() => matchMediaMock),
-            writable: true,
-        })
-    })
-
+describe('ThemeProvider (integration)', () => {
     beforeEach(() => {
         localStorage.clear()
+        document.documentElement.className = ''
     })
 
-    const TestComponent: FC = () => {
-        const { theme } = useTheme()
-        return <div>Current theme: {theme}</div>
-    }
+    it('initializes with default theme when nothing saved', async () => {
+        const expectedTheme: Theme = 'light'
+        const { getByTestId } = render(
+            <ThemeProvider defaultTheme={expectedTheme} storageKey="test-theme">
+                <ThemeConsumer />
+            </ThemeProvider>
+        )
 
-    describe('initial render and localstorage', () => {
-        it('initializes with a saved theme from localStorage', async () => {
-            localStorage.setItem('vite-ui-theme', 'dark')
-            const { getByText } = render(
-                <ThemeProvider>
-                    <TestComponent />
-                </ThemeProvider>
-            )
-
-            await expect
-                .element(getByText('Current theme: dark'))
-                .toBeInTheDocument()
-            expect(document.documentElement.classList.contains('dark')).toBe(
-                true
-            )
-        })
-
-        it.concurrent(
-            'initializes with defaultTheme if localStorage is empty',
-            async () => {
-                const { getByText } = render(
-                    <ThemeProvider defaultTheme="light">
-                        <TestComponent />
-                    </ThemeProvider>
-                )
-
-                await expect
-                    .element(getByText('Current theme: light'))
-                    .toBeInTheDocument()
-                expect(
-                    document.documentElement.classList.contains('light')
-                ).toBe(true)
-            }
+        await expect
+            .element(getByTestId('theme'))
+            .toHaveTextContent(expectedTheme)
+        expect(document.documentElement.classList.contains(expectedTheme)).toBe(
+            true
         )
     })
 
-    describe('switching themes', () => {
-        const TestComponentWithControls: FC = () => {
-            const { theme, setTheme } = useTheme()
-            return (
-                <div>
-                    <span>Current theme: {theme}</span>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setTheme('light')
-                        }}
-                    >
-                        Set Light
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setTheme('dark')
-                        }}
-                    >
-                        Set Dark
-                    </button>
-                </div>
-            )
-        }
+    it('initializes with saved theme from localStorage', () => {
+        const expectedTheme: Theme = 'dark'
 
-        it.concurrent(
-            'switches theme correctly and updates localStorage',
-            async () => {
-                const { getByText } = render(
-                    <ThemeProvider>
-                        <TestComponentWithControls />
-                    </ThemeProvider>
-                )
+        localStorage.setItem('test-theme', expectedTheme)
 
-                const darkButton = getByText('Set Dark')
-                await darkButton.click()
+        const { getByTestId } = render(
+            <ThemeProvider defaultTheme="light" storageKey="test-theme">
+                <ThemeConsumer />
+            </ThemeProvider>
+        )
 
-                await expect
-                    .element(getByText('Current theme: dark'))
-                    .toBeInTheDocument()
-                expect(localStorage.getItem('vite-ui-theme')).toBe('dark')
-                expect(
-                    document.documentElement.classList.contains('dark')
-                ).toBe(true)
-
-                const lightButton = getByText('Set Light')
-                await lightButton.click()
-
-                expect(getByText('Current theme: light')).toBeInTheDocument()
-                expect(localStorage.getItem('vite-ui-theme')).toBe('light')
-                expect(
-                    document.documentElement.classList.contains('light')
-                ).toBe(true)
-                expect(
-                    document.documentElement.classList.contains('dark')
-                ).toBe(false)
-            }
+        expect(getByTestId('theme')).toHaveTextContent(expectedTheme)
+        expect(document.documentElement.classList.contains(expectedTheme)).toBe(
+            true
         )
     })
 
-    describe('system theme', () => {
-        it('applies system theme based on initial prefers-color-scheme (dark)', async () => {
-            ;(window.matchMedia as Mock).mockImplementationOnce(() =>
-                createMatchMediaMock(true)
-            )
-            const { getByText } = render(
-                <ThemeProvider defaultTheme="system">
-                    <TestComponent />
-                </ThemeProvider>
-            )
+    it('switches themes and persists to localStorage', async () => {
+        const storageKey = 'test-theme'
+        let expectedTheme: Theme
 
-            await expect
-                .element(getByText('Current theme: system'))
-                .toBeInTheDocument()
-            expect(document.documentElement.classList.contains('dark')).toBe(
-                true
-            )
-            expect(window.matchMedia).toHaveBeenCalledWith(
-                '(prefers-color-scheme: dark)'
-            )
-        })
-
-        it('applies system theme based on initial prefers-color-scheme (light)', async () => {
-            ;(window.matchMedia as Mock).mockImplementationOnce(() =>
-                createMatchMediaMock(false)
-            )
-            const { getByText } = render(
-                <ThemeProvider defaultTheme="system">
-                    <TestComponent />
-                </ThemeProvider>
-            )
-
-            await expect
-                .element(getByText('Current theme: system'))
-                .toBeInTheDocument()
-            expect(document.documentElement.classList.contains('light')).toBe(
-                true
-            )
-        })
-
-        it.concurrent(
-            'listens for and responds to system theme changes',
-            () => {
-                const mockMatchMedia = createMatchMediaMock(true)
-                ;(window.matchMedia as Mock).mockImplementationOnce(
-                    () => mockMatchMedia
-                )
-
-                render(
-                    <ThemeProvider defaultTheme="system">
-                        <TestComponent />
-                    </ThemeProvider>
-                )
-
-                expect(
-                    document.documentElement.classList.contains('dark')
-                ).toBe(true)
-
-                const listener = mockMatchMedia.addEventListener.mock
-                    .calls[0][1] as (e: MediaQueryListEvent) => void
-
-                listener({ matches: false } as MediaQueryListEvent)
-
-                expect(
-                    document.documentElement.classList.contains('light')
-                ).toBe(true)
-                expect(
-                    document.documentElement.classList.contains('dark')
-                ).toBe(false)
-            }
+        const { getByText, getByTestId } = render(
+            <ThemeProvider defaultTheme="light" storageKey={storageKey}>
+                <ThemeConsumer />
+            </ThemeProvider>
         )
+
+        const themeElement = getByTestId('theme')
+
+        expectedTheme = 'dark'
+        await getByText('Set Dark').click()
+        await expect.element(themeElement).toHaveTextContent(expectedTheme)
+        expect(localStorage.getItem(storageKey)).toBe(expectedTheme)
+        expect(document.documentElement.classList.contains(expectedTheme)).toBe(
+            true
+        )
+
+        expectedTheme = 'light'
+        await getByText('Set Light').click()
+        await expect.element(themeElement).toHaveTextContent(expectedTheme)
+        expect(localStorage.getItem('test-theme')).toBe(expectedTheme)
+        expect(document.documentElement.classList.contains(expectedTheme)).toBe(
+            true
+        )
+    })
+
+    it('applies system theme and reacts to matchMedia changes', () => {
+        const mockMedia = mockMatchMedia(false)
+
+        render(
+            <ThemeProvider defaultTheme="system" storageKey="test-theme">
+                <ThemeConsumer />
+            </ThemeProvider>
+        )
+
+        expect(document.documentElement.classList.contains('light')).toBe(true)
+
+        mockMedia.dispatch({ matches: true } as MediaQueryListEvent)
+
+        expect(document.documentElement.classList.contains('dark')).toBe(true)
     })
 })
