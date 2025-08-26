@@ -6,7 +6,7 @@ interface ErrorWrapperProps {
 
 const ErrorWrapper: FC<ErrorWrapperProps> = ({ children }) => {
     return (
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen flex-col items-center justify-center gap-8">
             {children}
         </div>
     )
