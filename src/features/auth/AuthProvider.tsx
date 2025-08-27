@@ -1,4 +1,4 @@
-import { AuthContext, type User } from '@/lib/auth'
+import { AuthContext, type User } from '@/features/auth'
 import type { ContextProviderFactory } from '@/lib/context'
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
 

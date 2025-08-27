@@ -1,6 +1,6 @@
-import AuthProvider from '@/components/AuthProvider'
 import ErrorFallback from '@/components/ErrorFallback'
 import ThemeProvider from '@/components/ThemeProvider'
+import AuthProvider from '@/features/auth/AuthProvider'
 import { routes } from '@/routes'
 import {
     QueryClient,

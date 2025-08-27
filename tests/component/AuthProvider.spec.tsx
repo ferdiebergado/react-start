@@ -1,5 +1,5 @@
-import AuthProvider from '@/components/AuthProvider'
-import { useAuth, type User } from '@/lib/auth'
+import { useAuth, type User } from '@/features/auth'
+import AuthProvider from '@/features/auth/AuthProvider'
 import { describe, expect, it } from 'vitest'
 import { render, renderHook } from 'vitest-browser-react'
 

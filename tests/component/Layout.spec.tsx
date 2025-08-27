@@ -1,5 +1,5 @@
-import AuthProvider from '@/components/AuthProvider'
 import Layout from '@/components/Layout'
+import AuthProvider from '@/features/auth/AuthProvider'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'

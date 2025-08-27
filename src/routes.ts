@@ -4,10 +4,14 @@ import { type RouteObject } from 'react-router'
 
 const Home = lazy(() => import('@/Home'))
 const NotFound = lazy(() => import('@/components/NotFound'))
-const SignUp = lazy(() => import('@/components/SignUp'))
-const Login = lazy(() => import('@/components/Login'))
-const ForgotPassword = lazy(() => import('@/components/ForgotPassword'))
-const ResetPassword = lazy(() => import('@/components/ResetPassword'))
+const SignUp = lazy(() => import('@/features/auth/components/SignUp'))
+const Login = lazy(() => import('@/features/auth/components/Login'))
+const ForgotPassword = lazy(
+    () => import('@/features/auth/components/ForgotPassword')
+)
+const ResetPassword = lazy(
+    () => import('@/features/auth/components/ResetPassword')
+)
 
 export const routes: RouteObject[] = [
     {

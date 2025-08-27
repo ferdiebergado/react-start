@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import ForgotPassword from '@/components/ForgotPassword'
+import ForgotPassword from '@/features/auth/components/ForgotPassword'
 
 const meta = {
     component: ForgotPassword,
