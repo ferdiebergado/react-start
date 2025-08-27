@@ -79,41 +79,45 @@ This starter kit uses **React Router** for handling all client-side routing. The
 
 ```tsx
 <BrowserRouter>
-    <Routes>
-        <Route element={<Layout />}>
-            <Route index element={<Home />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-    </Routes>
+    <Routes />
 </BrowserRouter>
 ```
 
 ### Adding new routes
 
-All routes are defined in `router.tsx`. To create a route, add a `Route` component as child of the `Routes` component:
+All routes are defined in `routes.ts`. To create a route, add a `RouteObject` to the `routes` array:
 
 ```tsx
-<Routes>
-  // existing routes...
-  // a new route
-  <Route path="/about" element={<About />}>
-</Routes>
+// src/routes.tsx
+// omitted for brevity...
+export const routes: RouteObject[] = [
+    {
+        Component: Layout,
+        children: [
+            { index: true, Component: Home },
+            { path: 'signup', Component: SignUp },
+        ],
+    },
+    { path: '*', Component: NotFound },
+]
 ```
 
 ### Lazy loading components
 
-Deferring the loading of component’s code until it is rendered for the first time improves performance. To lazy load components, dynamically import components with the `lazy` function from react. Then, set the lazy-loaded component as the value of the element prop of the `Route` component.
+Deferring the loading of component’s code until it is rendered for the first time improves performance. To lazy load components, dynamically import components with the `lazy` function from react. Then, set the lazy-loaded component as the value of the `Component` property of the `RouteObject`.
 
 ```tsx
-const Home = lazy(() => import('@/Home'))
+const About = lazy(() => import('@/About'))
 
-// BrowserRouter here...
-<Route index element={<Home />} />
+export const routes: RouteObject[] = [
+    // existing route objects omitted for brevity...
+    { path: 'about', Component: About },
+]
 ```
 
 > **Tip:** _Always use absolute paths with path alias when importing for better maintainability. The `@` alias is preconfigured to point to the `src` folder._
 
-For a complete guide on defining routes and using hooks like `useLocation`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
+For a complete guide on defining routes and using hooks like `useRoutes` and `useLocation`, refer to the official [React Router documentation](https://reactrouter.com/start/data/routing).
 
 ## Data fetching
 
