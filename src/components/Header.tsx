@@ -28,6 +28,11 @@ const Header: FC = () => {
                         </NavigationLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
+                        <NavigationLink to="/login" end>
+                            Login
+                        </NavigationLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
                         <ModeToggle />
                     </NavigationMenuItem>
                 </NavigationMenuList>
