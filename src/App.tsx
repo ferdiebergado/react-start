@@ -1,6 +1,7 @@
+import AuthProvider from '@/components/AuthProvider'
 import ErrorFallback from '@/components/ErrorFallback'
 import ThemeProvider from '@/components/ThemeProvider'
-import Router from '@/router'
+import { routes } from '@/routes'
 import {
     QueryClient,
     QueryClientProvider,
@@ -8,9 +9,13 @@ import {
 } from '@tanstack/react-query'
 import { type FC } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import AuthProvider from './components/AuthProvider'
+import { BrowserRouter, useRoutes } from 'react-router'
 
 const queryClient = new QueryClient()
+
+const Routes = () => {
+    return useRoutes(routes)
+}
 
 const App: FC = () => {
     return (
@@ -23,7 +28,9 @@ const App: FC = () => {
                     >
                         <ThemeProvider>
                             <AuthProvider>
-                                <Router />
+                                <BrowserRouter>
+                                    <Routes />
+                                </BrowserRouter>
                             </AuthProvider>
                         </ThemeProvider>
                     </ErrorBoundary>
