@@ -1,3 +1,4 @@
+import AuthProvider from '@/components/AuthProvider'
 import Layout from '@/components/Layout'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { describe, expect, it } from 'vitest'
@@ -6,11 +7,13 @@ import { render } from 'vitest-browser-react'
 describe('Layout', () => {
     it.concurrent('renders the layout', async () => {
         const { getByText, getByRole } = render(
-            <MemoryRouter initialEntries={['/']}>
-                <Routes>
-                    <Route index element={<Layout />} />
-                </Routes>
-            </MemoryRouter>
+            <AuthProvider>
+                <MemoryRouter initialEntries={['/']}>
+                    <Routes>
+                        <Route index element={<Layout />} />
+                    </Routes>
+                </MemoryRouter>
+            </AuthProvider>
         )
 
         const nav = getByRole('navigation')

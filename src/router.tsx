@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 
 const Home = lazy(() => import('@/Home'))
 const NotFound = lazy(() => import('@/components/NotFound'))
+const SignUp = lazy(() => import('@/components/SignUp'))
 
 const Router: FC = () => {
     return (
@@ -11,6 +12,7 @@ const Router: FC = () => {
             <Routes>
                 <Route element={<Layout />}>
                     <Route index element={<Home />} />
+                    <Route path="/signup" element={<SignUp />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

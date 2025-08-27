@@ -9,7 +9,7 @@ import type { FC } from 'react'
 
 const Header: FC = () => {
     return (
-        <header className="dark:shadow-accent-foreground px-12 py-3 shadow-md">
+        <header className="dark:shadow-accent-foreground mb-16 px-12 py-2 shadow-md">
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
@@ -20,6 +20,11 @@ const Header: FC = () => {
                     <NavigationMenuItem>
                         <NavigationLink to="/about" end>
                             About
+                        </NavigationLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationLink to="/signup" end>
+                            Sign Up
                         </NavigationLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>

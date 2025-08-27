@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query'
 import { type FC } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import AuthProvider from './components/AuthProvider'
 
 const queryClient = new QueryClient()
 
@@ -21,7 +22,9 @@ const App: FC = () => {
                         onReset={reset}
                     >
                         <ThemeProvider>
-                            <Router />
+                            <AuthProvider>
+                                <Router />
+                            </AuthProvider>
                         </ThemeProvider>
                     </ErrorBoundary>
                 )}
