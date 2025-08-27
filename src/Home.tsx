@@ -11,7 +11,7 @@ import { Suspense, type FC } from 'react'
 
 const Home: FC = () => {
     return (
-        <Card className="m-16 shadow-md">
+        <Card className="mx-16 shadow-md">
             <CardHeader>
                 <CardTitle className="text-3xl">Random Quote</CardTitle>
                 <CardDescription>
