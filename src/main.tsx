@@ -22,23 +22,23 @@ if (!root) {
 
 createRoot(root).render(
     <StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <QueryErrorResetBoundary>
-                {({ reset }) => (
-                    <ErrorBoundary
-                        FallbackComponent={ErrorFallback}
-                        onReset={reset}
-                    >
-                        <ThemeProvider>
-                            <AuthProvider>
-                                <BrowserRouter>
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <QueryErrorResetBoundary>
+                    {({ reset }) => (
+                        <ErrorBoundary
+                            FallbackComponent={ErrorFallback}
+                            onReset={reset}
+                        >
+                            <ThemeProvider>
+                                <AuthProvider>
                                     <App />
-                                </BrowserRouter>
-                            </AuthProvider>
-                        </ThemeProvider>
-                    </ErrorBoundary>
-                )}
-            </QueryErrorResetBoundary>
-        </QueryClientProvider>
+                                </AuthProvider>
+                            </ThemeProvider>
+                        </ErrorBoundary>
+                    )}
+                </QueryErrorResetBoundary>
+            </QueryClientProvider>
+        </BrowserRouter>
     </StrictMode>
 )
