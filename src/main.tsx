@@ -1,7 +1,19 @@
 import App from '@/App.tsx'
+import ErrorFallback from '@/components/ErrorFallback'
+import ThemeProvider from '@/components/ThemeProvider'
+import AuthProvider from '@/features/auth/AuthProvider'
 import '@/index.css'
+import {
+    QueryClient,
+    QueryClientProvider,
+    QueryErrorResetBoundary,
+} from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { ErrorBoundary } from 'react-error-boundary'
+import { BrowserRouter } from 'react-router'
+
+const queryClient = new QueryClient()
 
 const root = document.getElementById('root')
 if (!root) {
@@ -10,6 +22,23 @@ if (!root) {
 
 createRoot(root).render(
     <StrictMode>
-        <App />
+        <QueryClientProvider client={queryClient}>
+            <QueryErrorResetBoundary>
+                {({ reset }) => (
+                    <ErrorBoundary
+                        FallbackComponent={ErrorFallback}
+                        onReset={reset}
+                    >
+                        <ThemeProvider>
+                            <AuthProvider>
+                                <BrowserRouter>
+                                    <App />
+                                </BrowserRouter>
+                            </AuthProvider>
+                        </ThemeProvider>
+                    </ErrorBoundary>
+                )}
+            </QueryErrorResetBoundary>
+        </QueryClientProvider>
     </StrictMode>
 )

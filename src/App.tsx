@@ -1,42 +1,25 @@
-import ErrorFallback from '@/components/ErrorFallback'
-import ThemeProvider from '@/components/ThemeProvider'
-import AuthProvider from '@/features/auth/AuthProvider'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
+import Spinner from '@/components/Spinner'
 import { routes } from '@/routes'
-import {
-    QueryClient,
-    QueryClientProvider,
-    QueryErrorResetBoundary,
-} from '@tanstack/react-query'
-import { type FC } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
-import { BrowserRouter, useRoutes } from 'react-router'
-
-const queryClient = new QueryClient()
-
-const Routes = () => {
-    return useRoutes(routes)
-}
+import { Suspense, type FC } from 'react'
+import { useRoutes } from 'react-router'
+import { Toaster } from 'sonner'
 
 const App: FC = () => {
+    const element = useRoutes(routes)
+
     return (
-        <QueryClientProvider client={queryClient}>
-            <QueryErrorResetBoundary>
-                {({ reset }) => (
-                    <ErrorBoundary
-                        FallbackComponent={ErrorFallback}
-                        onReset={reset}
-                    >
-                        <ThemeProvider>
-                            <AuthProvider>
-                                <BrowserRouter>
-                                    <Routes />
-                                </BrowserRouter>
-                            </AuthProvider>
-                        </ThemeProvider>
-                    </ErrorBoundary>
-                )}
-            </QueryErrorResetBoundary>
-        </QueryClientProvider>
+        <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="grow">
+                <section>
+                    <Suspense fallback={<Spinner />}>{element}</Suspense>
+                </section>
+            </main>
+            <Toaster position="top-right" richColors />
+            <Footer />
+        </div>
     )
 }
 
