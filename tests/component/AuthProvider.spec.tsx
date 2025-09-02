@@ -3,7 +3,11 @@ import AuthProvider from '@/features/auth/AuthProvider'
 import { describe, expect, it } from 'vitest'
 import { render, renderHook } from 'vitest-browser-react'
 
-const mockUser: User = { name: 'john', email: 'abc@example.com' }
+const mockUser: User = {
+    id: 'abc123',
+    email: 'abc@example.com',
+    token: { value: 'token', type: 'Bearer', expiresIn: 18000 },
+}
 
 function AuthConsumer() {
     const { user, login, logout } = useAuth()
@@ -15,7 +19,7 @@ function AuthConsumer() {
     return (
         <div>
             <div data-testid="user">
-                {user ? `${user.name} (${user.email})` : 'no user'}
+                {user ? `${user.email} (${user.email})` : 'no user'}
             </div>
             <button type="button" data-testid="login" onClick={handleLogin}>
                 login
@@ -49,7 +53,7 @@ describe('AuthProvider', () => {
         await loginBtn.click()
         await expect
             .element(getByTestId('user'))
-            .toHaveTextContent(mockUser.name)
+            .toHaveTextContent(mockUser.email)
 
         const logoutBtn = getByTestId('logout')
         await logoutBtn.click()
@@ -77,7 +81,11 @@ describe('useAuth', () => {
             wrapper: AuthProvider,
         })
 
-        const mockUser = { name: 'Alice', email: 'alice@example.com' }
+        const mockUser: User = {
+            id: 'abc1',
+            email: 'alice@example.com',
+            token: { value: 'token', type: 'Bearer', expiresIn: 1800 },
+        }
 
         act(() => {
             result.current.login(mockUser)

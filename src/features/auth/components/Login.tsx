@@ -16,11 +16,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
+import { useAuth, type User } from '@/features/auth'
 import { paths } from '@/routes'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
-import { memo } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { Loader2Icon } from 'lucide-react'
+import { memo, type FC } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -42,17 +45,55 @@ const SignUpBlock = memo(() => (
     </div>
 ))
 
+interface LoginData {
+    accessToken: string
+    refreshToken: string
+    tokenType: string
+    expiresIn: number
+    user: User
+}
+
+interface RouteState {
+    from: string
+}
+
+function isRouteState(object: unknown): object is RouteState {
+    if (object === null || typeof object !== 'object') {
+        return false
+    }
+    return 'from' in object && typeof object.from === 'string'
+}
+
 const formSchema = z
     .object({
-        email: z.email(),
-        password: z.string(),
+        email: z.email().trim(),
+        password: z.string().trim(),
     })
     .required({
         email: true,
         password: true,
     })
 
-export default function SignIn() {
+interface Credentials {
+    email: string
+    password: string
+}
+
+async function loginUser(creds: Credentials): Promise<LoginData> {
+    const res = await fetch('http://localhost:8888/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(creds),
+    })
+
+    if (!res.ok) throw new Error('Login request failed.')
+
+    return (await res.json()) as LoginData
+}
+
+const Login: FC = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: standardSchemaResolver(formSchema),
         defaultValues: {
@@ -61,14 +102,39 @@ export default function SignIn() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        try {
-            console.log(values)
-            toast.success(JSON.stringify(values, null, 2))
-        } catch (error) {
+    const { login } = useAuth()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const { mutate, isPending } = useMutation({
+        mutationFn: loginUser,
+        onSuccess: ({
+            accessToken,
+            tokenType,
+            expiresIn,
+            user: { id, email },
+        }) => {
+            login({
+                id,
+                email,
+                token: { value: accessToken, type: tokenType, expiresIn },
+            })
+
+            toast.success('You are now logged in!')
+
+            let redirectPath = '/'
+            if (isRouteState(location.state)) {
+                redirectPath = location.state.from
+            }
+            navigate(redirectPath)
+        },
+        onError: (error) => {
             console.error('Form submission error', error)
             toast.error('Failed to submit the form. Please try again.')
-        }
+        },
+    })
+
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
+        mutate(values)
     }
 
     return (
@@ -131,8 +197,19 @@ export default function SignIn() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full">
-                                Login
+                            <Button
+                                type="submit"
+                                className="w-full"
+                                disabled={isPending}
+                            >
+                                {isPending ? (
+                                    <>
+                                        <Loader2Icon className="animate-spin" />
+                                        Logging in...
+                                    </>
+                                ) : (
+                                    'Login'
+                                )}
                             </Button>
                             <Button variant="outline" className="w-full">
                                 Login with Google
@@ -145,3 +222,5 @@ export default function SignIn() {
         </Card>
     )
 }
+
+export default Login

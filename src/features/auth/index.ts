@@ -1,8 +1,15 @@
 import { createContext, use } from 'react'
 
+export interface Token {
+    value: string
+    type: string
+    expiresIn: number
+}
+
 export interface User {
-    name: string
+    id: string
     email: string
+    token: Token
 }
 
 export interface AuthState {
@@ -16,8 +23,7 @@ export const AuthContext = createContext<AuthState | undefined>(undefined)
 export function useAuth() {
     const context = use(AuthContext)
 
-    if (context === undefined)
-        throw new Error('useAuth must be used within an AuthProvider')
+    if (!context) throw new Error('useAuth must be used within an AuthProvider')
 
     return context
 }
