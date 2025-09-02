@@ -26,11 +26,6 @@ import { z } from 'zod'
 
 const formSchema = z
     .object({
-        name: z
-            .string()
-            .min(3, { message: 'Username must be at least 3 characters long' })
-            .max(20, { message: 'Username cannot exceed 20 characters' })
-            .trim(),
         email: z.email({ message: 'Invalid email address' }),
         password: z
             .string()
@@ -67,7 +62,6 @@ const SignUp: FC = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: standardSchemaResolver(formSchema),
         defaultValues: {
-            name: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -101,27 +95,6 @@ const SignUp: FC = () => {
                         className="space-y-8"
                     >
                         <div className="grid gap-4">
-                            {/* Name Field */}
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem className="grid gap-2">
-                                        <FormLabel htmlFor="name">
-                                            Full Name
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                id="name"
-                                                placeholder="John Doe"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
                             {/* Email Field */}
                             <FormField
                                 control={form.control}
