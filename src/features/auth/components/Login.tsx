@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
+import { paths } from '@/routes'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { memo } from 'react'
 import { useForm } from 'react-hook-form'
@@ -25,7 +26,7 @@ import { z } from 'zod'
 
 const ForgotPasswordBlock = memo(() => (
     <Link
-        to="/forgot-password"
+        to={paths.forgotPassword}
         className="ml-auto inline-block text-sm underline"
     >
         Forgot your password?
@@ -35,7 +36,7 @@ const ForgotPasswordBlock = memo(() => (
 const SignUpBlock = memo(() => (
     <div className="mt-4 text-center text-sm">
         Don&apos;t have an account?{' '}
-        <Link to="/signup" className="underline">
+        <Link to={paths.signup} className="underline">
             Sign up
         </Link>
     </div>
@@ -51,7 +52,7 @@ const formSchema = z
         password: true,
     })
 
-export default function LoginPreview() {
+export default function SignIn() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: standardSchemaResolver(formSchema),
         defaultValues: {

@@ -12,11 +12,18 @@ const ResetPassword = lazy(
     () => import('@/features/auth/components/ResetPassword')
 )
 
+export const paths = {
+    signup: '/signup',
+    signin: '/signin',
+    forgotPassword: '/forgot-password',
+    resetPassword: '/reset-password',
+}
+
 export const routes = [
     { index: true, Component: Home },
-    { path: 'signup', Component: SignUp },
-    { path: 'login', Component: Login },
-    { path: 'forgot-password', Component: ForgotPassword },
-    { path: 'reset-password', Component: ResetPassword },
+    { path: paths.signup, Component: SignUp },
+    { path: paths.signin, Component: Login },
+    { path: paths.forgotPassword, Component: ForgotPassword },
+    { path: paths.resetPassword, Component: ResetPassword },
     { path: '*', Component: NotFound },
 ] satisfies RouteObject[]

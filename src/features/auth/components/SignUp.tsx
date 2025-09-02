@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
+import { paths } from '@/routes'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { memo, type FC } from 'react'
 import { useForm } from 'react-hook-form'
@@ -56,7 +57,7 @@ const formSchema = z
 const LoginBlock = memo(() => (
     <div className="mt-4 text-center text-sm">
         Already have an account?{' '}
-        <Link to="/login" className="underline underline-offset-4">
+        <Link to={paths.signin} className="underline underline-offset-4">
             Login
         </Link>
     </div>

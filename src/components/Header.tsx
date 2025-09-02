@@ -5,6 +5,7 @@ import {
     NavigationMenuItem,
     NavigationMenuList,
 } from '@/components/ui/navigation-menu'
+import { paths } from '@/routes'
 import type { FC } from 'react'
 
 const Header: FC = () => {
@@ -23,12 +24,12 @@ const Header: FC = () => {
                         </NavigationLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationLink to="/signup" end>
+                        <NavigationLink to={paths.signup} end>
                             Sign Up
                         </NavigationLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <NavigationLink to="/login" end>
+                        <NavigationLink to={paths.signin} end>
                             Login
                         </NavigationLink>
                     </NavigationMenuItem>
