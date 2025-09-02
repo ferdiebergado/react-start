@@ -1,4 +1,3 @@
-import Layout from '@/components/Layout'
 import { lazy } from 'react'
 import { type RouteObject } from 'react-router'
 
@@ -13,16 +12,11 @@ const ResetPassword = lazy(
     () => import('@/features/auth/components/ResetPassword')
 )
 
-export const routes: RouteObject[] = [
-    {
-        Component: Layout,
-        children: [
-            { index: true, Component: Home },
-            { path: 'signup', Component: SignUp },
-            { path: 'login', Component: Login },
-            { path: 'forgot-password', Component: ForgotPassword },
-            { path: 'reset-password', Component: ResetPassword },
-        ],
-    },
+export const routes = [
+    { index: true, Component: Home },
+    { path: 'signup', Component: SignUp },
+    { path: 'login', Component: Login },
+    { path: 'forgot-password', Component: ForgotPassword },
+    { path: 'reset-password', Component: ResetPassword },
     { path: '*', Component: NotFound },
-]
+] satisfies RouteObject[]
