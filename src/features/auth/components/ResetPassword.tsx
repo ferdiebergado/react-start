@@ -28,8 +28,10 @@ const formSchema = z
   .refine(({ password, confirmPassword }) => password === confirmPassword)
   .required({ password: true, confirmPassword: true });
 
+type ResetPasswordForm = z.infer<typeof formSchema>;
+
 export default function ResetPasswordPreview() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<ResetPasswordForm>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       password: '',
@@ -37,7 +39,7 @@ export default function ResetPasswordPreview() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: ResetPasswordForm) {
     try {
       console.log(values);
       toast.success(
