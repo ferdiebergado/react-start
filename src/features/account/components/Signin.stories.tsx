@@ -1,24 +1,26 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import AuthProvider from '@/features/auth/AuthProvider';
-import SignUp from '@/features/auth/components/SignUp';
+import AccountProvider from '@/features/account/AccountProvider';
+import Signin from '@/features/account/components/Signin';
 import { MemoryRouter } from 'react-router';
 
 const meta = {
-  component: SignUp,
+  component: Signin,
   decorators: [
     (Story) => (
-      <AuthProvider>
+      <AccountProvider>
         <MemoryRouter>
           <Story />
         </MemoryRouter>
-      </AuthProvider>
+      </AccountProvider>
     ),
   ],
-} satisfies Meta<typeof SignUp>;
+} satisfies Meta<typeof Signin>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {},
+};

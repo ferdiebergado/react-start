@@ -1,7 +1,7 @@
 import App from '@/App.tsx';
 import ErrorFallback from '@/components/ErrorFallback';
 import ThemeProvider from '@/components/ThemeProvider';
-import AuthProvider from '@/features/auth/AuthProvider';
+import AccountProvider from '@/features/account/AccountProvider';
 import '@/index.css';
 import {
   QueryClient,
@@ -28,9 +28,9 @@ createRoot(root).render(
           {({ reset }) => (
             <ErrorBoundary FallbackComponent={ErrorFallback} onReset={reset}>
               <ThemeProvider>
-                <AuthProvider>
+                <AccountProvider>
                   <App />
-                </AuthProvider>
+                </AccountProvider>
               </ThemeProvider>
             </ErrorBoundary>
           )}

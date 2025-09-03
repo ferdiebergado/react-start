@@ -3,13 +3,13 @@ import { type RouteObject } from 'react-router';
 
 const Home = lazy(() => import('@/Home'));
 const NotFound = lazy(() => import('@/components/NotFound'));
-const SignUp = lazy(() => import('@/features/auth/components/SignUp'));
-const Login = lazy(() => import('@/features/auth/components/Signin'));
+const SignUp = lazy(() => import('@/features/account/components/SignUp'));
+const Login = lazy(() => import('@/features/account/components/Signin'));
 const ForgotPassword = lazy(
-  () => import('@/features/auth/components/ForgotPassword')
+  () => import('@/features/account/components/ForgotPassword')
 );
 const ResetPassword = lazy(
-  () => import('@/features/auth/components/ResetPassword')
+  () => import('@/features/account/components/ResetPassword')
 );
 
 export const paths = {

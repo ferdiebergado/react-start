@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
-import { useAuth, type User } from '@/features/auth';
+import { useAccount, type User } from '@/features/account';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
@@ -104,7 +104,7 @@ const Signin: FC = () => {
     },
   });
 
-  const { login } = useAuth();
+  const { signin: login } = useAccount();
   const navigate = useNavigate();
   const location = useLocation();
   const { mutate, isPending } = useMutation({
