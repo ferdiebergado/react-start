@@ -1,18 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import Footer from './Footer'
+import Footer from './Footer';
 
 const meta = {
-    component: Footer,
-    parameters: {
-        layout: 'centered',
-    },
-} satisfies Meta<typeof Footer>
+  component: Footer,
+  parameters: {
+    layout: 'centered',
+  },
+} satisfies Meta<typeof Footer>;
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {},
-}
+  args: {},
+};

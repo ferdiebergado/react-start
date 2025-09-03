@@ -1,8 +1,8 @@
-import type { NavigateOptions, To } from 'react-router'
+import type { NavigateOptions, To } from 'react-router';
 
 declare module 'react-router' {
-    interface NavigateFunction {
-        (to: To, options?: NavigateOptions): void
-        (delta: number): void
-    }
+  interface NavigateFunction {
+    (to: To, options?: NavigateOptions): void;
+    (delta: number): void;
+  }
 }

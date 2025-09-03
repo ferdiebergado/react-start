@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import NotFound from './NotFound'
+import NotFound from './NotFound';
 
 const meta = {
-    component: NotFound,
-} satisfies Meta<typeof NotFound>
+  component: NotFound,
+} satisfies Meta<typeof NotFound>;
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {},
-}
+  args: {},
+};

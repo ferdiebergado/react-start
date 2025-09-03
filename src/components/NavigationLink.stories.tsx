@@ -1,37 +1,37 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import NavigationLink from '@/components/NavigationLink'
+import NavigationLink from '@/components/NavigationLink';
 import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuList,
-} from '@/components/ui/navigation-menu'
-import { MemoryRouter } from 'react-router'
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+} from '@/components/ui/navigation-menu';
+import { MemoryRouter } from 'react-router';
 
 const meta = {
-    component: NavigationLink,
-    parameters: {
-        layout: 'centered',
-    },
-    decorators: [
-        (Story) => (
-            <MemoryRouter>
-                <NavigationMenu>
-                    <NavigationMenuList>
-                        <NavigationMenuItem>
-                            <Story />
-                        </NavigationMenuItem>
-                    </NavigationMenuList>
-                </NavigationMenu>
-            </MemoryRouter>
-        ),
-    ],
-} satisfies Meta<typeof NavigationLink>
+  component: NavigationLink,
+  parameters: {
+    layout: 'centered',
+  },
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Story />
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </MemoryRouter>
+    ),
+  ],
+} satisfies Meta<typeof NavigationLink>;
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: { to: '/', children: 'Home' },
-}
+  args: { to: '/', children: 'Home' },
+};

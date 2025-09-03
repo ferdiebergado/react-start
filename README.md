@@ -79,7 +79,7 @@ This starter kit uses **React Router** for handling all client-side routing. The
 
 ```tsx
 <BrowserRouter>
-    <Routes />
+  <Routes />
 </BrowserRouter>
 ```
 
@@ -91,15 +91,15 @@ All routes are defined in `routes.ts`. To create a route, add a `RouteObject` to
 // src/routes.tsx
 // omitted for brevity...
 export const routes: RouteObject[] = [
-    {
-        Component: Layout,
-        children: [
-            { index: true, Component: Home },
-            { path: 'signup', Component: SignUp },
-        ],
-    },
-    { path: '*', Component: NotFound },
-]
+  {
+    Component: Layout,
+    children: [
+      { index: true, Component: Home },
+      { path: 'signup', Component: SignUp },
+    ],
+  },
+  { path: '*', Component: NotFound },
+];
 ```
 
 ### Lazy loading components
@@ -107,12 +107,12 @@ export const routes: RouteObject[] = [
 Deferring the loading of component’s code until it is rendered for the first time improves performance. To lazy load components, dynamically import components with the `lazy` function from react. Then, set the lazy-loaded component as the value of the `Component` property of the `RouteObject`.
 
 ```tsx
-const About = lazy(() => import('@/About'))
+const About = lazy(() => import('@/About'));
 
 export const routes: RouteObject[] = [
-    // existing route objects omitted for brevity...
-    { path: 'about', Component: About },
-]
+  // existing route objects omitted for brevity...
+  { path: 'about', Component: About },
+];
 ```
 
 > **Tip:** _Always use absolute paths with path alias when importing for better maintainability. The `@` alias is preconfigured to point to the `src` folder._
@@ -125,39 +125,36 @@ We utilize **React Query** for efficient server-state management. The `QueryClie
 
 ```tsx
 // src/App.tsx
-import ErrorFallback from '@/components/ErrorFallback'
-import ThemeProvider from '@/components/ThemeProvider'
-import Router from '@/router'
+import ErrorFallback from '@/components/ErrorFallback';
+import ThemeProvider from '@/components/ThemeProvider';
+import Router from '@/router';
 import {
-    QueryClient,
-    QueryClientProvider,
-    QueryErrorResetBoundary,
-} from '@tanstack/react-query'
-import { type FC } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+  QueryClient,
+  QueryClientProvider,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
+import { type FC } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const App: FC = () => {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <QueryErrorResetBoundary>
-                {({ reset }) => (
-                    <ErrorBoundary
-                        FallbackComponent={ErrorFallback}
-                        onReset={reset}
-                    >
-                        <ThemeProvider>
-                            <Router />
-                        </ThemeProvider>
-                    </ErrorBoundary>
-                )}
-            </QueryErrorResetBoundary>
-        </QueryClientProvider>
-    )
-}
+  return (
+    <QueryClientProvider client={queryClient}>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary FallbackComponent={ErrorFallback} onReset={reset}>
+            <ThemeProvider>
+              <Router />
+            </ThemeProvider>
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
+    </QueryClientProvider>
+  );
+};
 
-export default App
+export default App;
 ```
 
 To fetch data with React Query, first create a custom hook that calls `useQuery` or `useSuspenseQuery`.
@@ -165,24 +162,24 @@ To fetch data with React Query, first create a custom hook that calls `useQuery`
 ```ts
 // src/features/quote/index.ts
 export interface Quote {
-    id: number
-    quote: string
-    author: string
+  id: number;
+  quote: string;
+  author: string;
 }
 
 async function fetchRandomQuote(): Promise<Quote> {
-    const res = await fetch('https://dummyjson.com/quotes/random')
-    if (!res.ok) throw new Error(res.statusText)
-    return (await res.json()) as Quote
+  const res = await fetch('https://dummyjson.com/quotes/random');
+  if (!res.ok) throw new Error(res.statusText);
+  return (await res.json()) as Quote;
 }
 
 export const randomQuoteQuery = queryOptions({
-    queryKey: ['random_quote'],
-    queryFn: fetchRandomQuote,
-})
+  queryKey: ['random_quote'],
+  queryFn: fetchRandomQuote,
+});
 
 export function useRandomQuote() {
-    return useSuspenseQuery(randomQuoteQuery)
+  return useSuspenseQuery(randomQuoteQuery);
 }
 ```
 
@@ -190,23 +187,23 @@ Then, call the custom hook on the component to make the fetched data available t
 
 ```tsx
 // src/features/quote/RandomQuote.tsx
-import { useRandomQuote } from '@/features/quote'
-import type { FC } from 'react'
+import { useRandomQuote } from '@/features/quote';
+import type { FC } from 'react';
 
 const RandomQuote: FC = () => {
-    const {
-        data: { quote, author },
-    } = useRandomQuote()
+  const {
+    data: { quote, author },
+  } = useRandomQuote();
 
-    return (
-        <blockquote>
-            <span className="text-lg italic">"{quote}"</span>
-            <footer className="pt-4 text-xl font-bold">{author}</footer>
-        </blockquote>
-    )
-}
+  return (
+    <blockquote>
+      <span className="text-lg italic">"{quote}"</span>
+      <footer className="pt-4 text-xl font-bold">{author}</footer>
+    </blockquote>
+  );
+};
 
-export default RandomQuote
+export default RandomQuote;
 ```
 
 When using `useSuspenseQuery`, wrap your component that calls it with a `Suspense` boundary.
@@ -214,35 +211,35 @@ When using `useSuspenseQuery`, wrap your component that calls it with a `Suspens
 ```tsx
 // src/Home.tsx
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
-import RandomQuote from '@/features/quote/RandomQuote'
-import SkeletonRandomQuote from '@/features/quote/SkeletonRandomQuote'
-import { Suspense, type FC } from 'react'
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import RandomQuote from '@/features/quote/RandomQuote';
+import SkeletonRandomQuote from '@/features/quote/SkeletonRandomQuote';
+import { Suspense, type FC } from 'react';
 
 const Home: FC = () => {
-    return (
-        <Card className="m-16 shadow-md">
-            <CardHeader>
-                <CardTitle className="text-3xl">Random Quote</CardTitle>
-                <CardDescription>
-                    A demo of data fetching using React Query
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Suspense fallback={<SkeletonRandomQuote />}>
-                    <RandomQuote />
-                </Suspense>
-            </CardContent>
-        </Card>
-    )
-}
+  return (
+    <Card className="m-16 shadow-md">
+      <CardHeader>
+        <CardTitle className="text-3xl">Random Quote</CardTitle>
+        <CardDescription>
+          A demo of data fetching using React Query
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Suspense fallback={<SkeletonRandomQuote />}>
+          <RandomQuote />
+        </Suspense>
+      </CardContent>
+    </Card>
+  );
+};
 
-export default Home
+export default Home;
 ```
 
 > **Tip**: _Structure your component atomically (smallest possible component) to prevent unnecessary re-renders. React Compiler can't help you if your components are not well-structured._
@@ -261,17 +258,17 @@ You can then import it like this:
 
 ```tsx
 // src/App.tsx
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 
 function App() {
-    return (
-        <div className="flex min-h-svh flex-col items-center justify-center">
-            <Button>Click me</Button>
-        </div>
-    )
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center">
+      <Button>Click me</Button>
+    </div>
+  );
 }
 
-export default App
+export default App;
 ```
 
 To learn more about the available components, how to add, import, and customize them, consult the [shadcn/ui documentation](https://ui.shadcn.com/docs/installation/vite#add-components).
@@ -296,11 +293,11 @@ For a guide on the concept of stories and to create stories, visit the [storyboo
 
 - Why use **React Router** in `declarative mode`?
 
-    This template follows the principle of _separation of concerns_, thus, **React Router** is only used for handling client side routing, nothing else. For data fetching needs, **React Query** is integrated for that purpose.
+  This template follows the principle of _separation of concerns_, thus, **React Router** is only used for handling client side routing, nothing else. For data fetching needs, **React Query** is integrated for that purpose.
 
 - Where to place my code?
 
-    For scalability, we recommend that you organize your code into "features". Create a folder for your feature in the `src/features` folder and put all your code there.
+  For scalability, we recommend that you organize your code into "features". Create a folder for your feature in the `src/features` folder and put all your code there.
 
 ## Suggested libraries/tools
 

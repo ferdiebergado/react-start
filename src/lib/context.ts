@@ -1,3 +1,3 @@
-import type { JSX } from 'react'
+import type { JSX } from 'react';
 
-export type ContextProviderFactory<T> = (props: T) => JSX.Element
+export type ContextProviderFactory<T> = (props: T) => JSX.Element;

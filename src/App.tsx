@@ -1,26 +1,26 @@
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
-import Spinner from '@/components/Spinner'
-import { routes } from '@/routes'
-import { Suspense, type FC } from 'react'
-import { useRoutes } from 'react-router'
-import { Toaster } from 'sonner'
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import Spinner from '@/components/Spinner';
+import { routes } from '@/routes';
+import { Suspense, type FC } from 'react';
+import { useRoutes } from 'react-router';
+import { Toaster } from 'sonner';
 
 const App: FC = () => {
-    const element = useRoutes(routes)
+  const element = useRoutes(routes);
 
-    return (
-        <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="grow">
-                <section>
-                    <Suspense fallback={<Spinner />}>{element}</Suspense>
-                </section>
-            </main>
-            <Toaster position="top-right" richColors />
-            <Footer />
-        </div>
-    )
-}
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="grow">
+        <section>
+          <Suspense fallback={<Spinner />}>{element}</Suspense>
+        </section>
+      </main>
+      <Toaster position="top-right" richColors />
+      <Footer />
+    </div>
+  );
+};
 
-export default App
+export default App;
