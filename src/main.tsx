@@ -1,4 +1,4 @@
-import App from '@/App.tsx';
+import App from '@/App';
 import ErrorFallback from '@/components/ErrorFallback';
 import ThemeProvider from '@/components/ThemeProvider';
 import AccountProvider from '@/features/account/AccountProvider';
