@@ -45,7 +45,7 @@ const SignUpBlock = memo(() => (
   </div>
 ));
 
-interface LoginData {
+interface SigninData {
   accessToken: string;
   refreshToken: string;
   tokenType: string;
@@ -79,7 +79,7 @@ interface Credentials {
   password: string;
 }
 
-async function loginUser(creds: Credentials): Promise<LoginData> {
+async function signinUser(creds: Credentials): Promise<SigninData> {
   const res = await fetch('http://localhost:8888/auth/login', {
     method: 'POST',
     headers: {
@@ -88,15 +88,15 @@ async function loginUser(creds: Credentials): Promise<LoginData> {
     body: JSON.stringify(creds),
   });
 
-  if (!res.ok) throw new Error('Login request failed.');
+  if (!res.ok) throw new Error('Signin request failed.');
 
-  return (await res.json()) as LoginData;
+  return (await res.json()) as SigninData;
 }
 
-type LoginForm = z.infer<typeof formSchema>
+type SigninForm = z.infer<typeof formSchema>;
 
-const Login: FC = () => {
-  const form = useForm<LoginForm>({
+const Signin: FC = () => {
+  const form = useForm<SigninForm>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
@@ -108,7 +108,7 @@ const Login: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { mutate, isPending } = useMutation({
-    mutationFn: loginUser,
+    mutationFn: signinUser,
     onSuccess: ({ accessToken, tokenType, expiresIn, user: { id, email } }) => {
       login({
         id,
@@ -116,7 +116,7 @@ const Login: FC = () => {
         token: { value: accessToken, type: tokenType, expiresIn },
       });
 
-      toast.success('You are now logged in!');
+      toast.success('You are now signed in!');
 
       let redirectPath = '/';
       if (isRouteState(location.state)) {
@@ -130,16 +130,16 @@ const Login: FC = () => {
     },
   });
 
-  const onSubmit = (values: LoginForm) => {
+  const onSubmit = (values: SigninForm) => {
     mutate(values);
   };
 
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">Signin</CardTitle>
         <CardDescription>
-          Enter your email and password to login to your account.
+          Enter your email and password to signin to your account.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -194,14 +194,14 @@ const Login: FC = () => {
                 {isPending ? (
                   <>
                     <Loader2Icon className="animate-spin" />
-                    Logging in...
+                    Signing in...
                   </>
                 ) : (
-                  'Login'
+                  'Signin'
                 )}
               </Button>
               <Button variant="outline" className="w-full">
-                Login with Google
+                Signin with Google
               </Button>
             </div>
           </form>
@@ -212,4 +212,4 @@ const Login: FC = () => {
   );
 };
 
-export default Login;
+export default Signin;

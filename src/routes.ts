@@ -4,7 +4,7 @@ import { type RouteObject } from 'react-router';
 const Home = lazy(() => import('@/Home'));
 const NotFound = lazy(() => import('@/components/NotFound'));
 const SignUp = lazy(() => import('@/features/auth/components/SignUp'));
-const Login = lazy(() => import('@/features/auth/components/Login'));
+const Login = lazy(() => import('@/features/auth/components/Signin'));
 const ForgotPassword = lazy(
   () => import('@/features/auth/components/ForgotPassword')
 );
