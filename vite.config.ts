@@ -16,29 +16,13 @@ export default defineConfig({
     },
   },
   test: {
-    projects: [
-      {
-        extends: true,
-        test: {
-          name: 'unit',
-          environment: 'node',
-          include: ['./tests/unit/**/*.{test,spec}.ts'],
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: 'component',
-          browser: {
-            enabled: true,
-            headless: true,
-            provider: 'playwright',
-            instances: [{ browser: 'chromium' }],
-          },
-          include: ['./tests/component/**/*.{test,spec}.tsx'],
-          setupFiles: './vitest-setup-client.ts',
-        },
-      },
-    ],
+    name: 'browser',
+    browser: {
+      enabled: true,
+      headless: true,
+      provider: 'playwright',
+      instances: [{ browser: 'chromium' }],
+    },
+    setupFiles: './vitest-setup-client.ts',
   },
 });
