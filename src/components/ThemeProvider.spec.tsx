@@ -1,12 +1,11 @@
 import ThemeProvider from '@/components/ThemeProvider';
-import { ThemeProviderContext, type Theme } from '@/lib/theme';
-import { use } from 'react';
+import { mockMatchMedia } from '@/lib/mockMatchMedia';
+import { useTheme, type Theme } from '@/lib/theme';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { mockMatchMedia } from '../utils/mockMatchMedia';
 
 function ThemeConsumer() {
-  const { theme, setTheme } = use(ThemeProviderContext);
+  const { theme, setTheme } = useTheme();
   return (
     <div>
       <span data-testid="theme">{theme}</span>
