@@ -1,47 +1,47 @@
 import ThemeProvider from '@/components/ThemeProvider';
-import { mockMatchMedia } from '@/lib/mockMatchMedia';
 import { useTheme, type Theme } from '@/lib/theme';
-import { beforeEach, describe, expect, it } from 'vitest';
+import type { FC } from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 
-function ThemeConsumer() {
-  const { theme, setTheme } = useTheme();
-  return (
-    <div>
-      <span data-testid="theme">{theme}</span>
-      <button
-        type="button"
-        onClick={() => {
-          setTheme('light');
-        }}
-      >
-        Set Light
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          setTheme('dark');
-        }}
-      >
-        Set Dark
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          setTheme('system');
-        }}
-      >
-        Set System
-      </button>
-    </div>
-  );
-}
-
-describe('ThemeProvider (integration)', () => {
+describe('ThemeProvider', () => {
   beforeEach(() => {
     localStorage.clear();
     document.documentElement.className = '';
   });
+
+  const ThemeConsumer: FC = () => {
+    const { theme, setTheme } = useTheme();
+    return (
+      <div>
+        <span data-testid="theme">{theme}</span>
+        <button
+          type="button"
+          onClick={() => {
+            setTheme('light');
+          }}
+        >
+          Set Light
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setTheme('dark');
+          }}
+        >
+          Set Dark
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setTheme('system');
+          }}
+        >
+          Set System
+        </button>
+      </div>
+    );
+  };
 
   it('initializes with default theme when nothing saved', async () => {
     const expectedTheme: Theme = 'light';
@@ -104,6 +104,25 @@ describe('ThemeProvider (integration)', () => {
   });
 
   it('applies system theme and reacts to matchMedia changes', () => {
+    const mockMatchMedia = (initial = false) => {
+      let listener: ((e: MediaQueryListEvent) => void) | undefined;
+
+      const instance = {
+        matches: initial,
+        media: '(prefers-color-scheme: dark)',
+        addEventListener: (_: string, cb: (e: MediaQueryListEvent) => void) => {
+          listener = cb;
+        },
+        removeEventListener: vi.fn(),
+        dispatch(e: MediaQueryListEvent) {
+          listener?.(e);
+        },
+      };
+
+      window.matchMedia = vi.fn().mockImplementation(() => instance);
+      return instance;
+    };
+
     const mockMedia = mockMatchMedia(false);
 
     render(
