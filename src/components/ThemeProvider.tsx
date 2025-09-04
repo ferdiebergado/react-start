@@ -1,5 +1,5 @@
 import type { ContextProviderFactory } from '@/lib/context';
-import { ThemeProviderContext, type Theme } from '@/lib/theme';
+import { isTheme, ThemeProviderContext, type Theme } from '@/lib/theme';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
 interface ThemeProviderProps {
@@ -11,11 +11,9 @@ interface ThemeProviderProps {
 function loadSavedTheme(storageKey: string, defaultTheme: Theme): Theme {
   const savedTheme = localStorage.getItem(storageKey);
 
-  let theme: Theme;
-  if (savedTheme) {
-    theme = savedTheme as Theme;
-  } else {
-    theme = defaultTheme;
+  let theme = defaultTheme;
+  if (isTheme(savedTheme)) {
+    theme = savedTheme;
   }
 
   return theme;

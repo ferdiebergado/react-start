@@ -2,6 +2,14 @@ import { createContext, use } from 'react';
 
 export type Theme = 'dark' | 'light' | 'system';
 
+export function isTheme(value: unknown): value is Theme {
+  return (
+    (typeof value === 'string' && value === 'dark') ||
+    value === 'light' ||
+    value === 'system'
+  );
+}
+
 interface ThemeProviderState {
   theme: Theme;
   setTheme: (theme: Theme) => void;
