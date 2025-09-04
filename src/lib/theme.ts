@@ -1,12 +1,6 @@
-import { createContext, use, type ReactNode } from 'react';
+import { createContext, use } from 'react';
 
 export type Theme = 'dark' | 'light' | 'system';
-
-export interface ThemeProviderProps {
-  children: ReactNode;
-  defaultTheme?: Theme;
-  storageKey?: string;
-}
 
 interface ThemeProviderState {
   theme: Theme;

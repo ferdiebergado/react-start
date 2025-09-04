@@ -1,10 +1,12 @@
 import type { ContextProviderFactory } from '@/lib/context';
-import {
-  ThemeProviderContext,
-  type Theme,
-  type ThemeProviderProps,
-} from '@/lib/theme';
-import { useEffect, useMemo, useState } from 'react';
+import { ThemeProviderContext, type Theme } from '@/lib/theme';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+
+interface ThemeProviderProps {
+  children: ReactNode;
+  defaultTheme?: Theme;
+  storageKey?: string;
+}
 
 function loadSavedTheme(storageKey: string, defaultTheme: Theme): Theme {
   const savedTheme = localStorage.getItem(storageKey);
@@ -30,20 +32,20 @@ const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
   );
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
+    const { classList } = window.document.documentElement;
+    classList.remove('light', 'dark');
 
     const handleSystemThemeChange = (e: MediaQueryListEvent) => {
       const newSystemTheme = e.matches ? 'dark' : 'light';
-      root.classList.remove('light', 'dark');
-      root.classList.add(newSystemTheme);
+      classList.remove('light', 'dark');
+      classList.add(newSystemTheme);
     };
 
     if (theme === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
       const systemTheme = mediaQuery.matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
+      classList.add(systemTheme);
 
       mediaQuery.addEventListener('change', handleSystemThemeChange);
 
@@ -51,10 +53,10 @@ const ThemeProvider: ContextProviderFactory<ThemeProviderProps> = ({
         mediaQuery.removeEventListener('change', handleSystemThemeChange);
       };
     } else {
-      root.classList.add(theme);
+      classList.add(theme);
     }
 
-    root.classList.add(theme);
+    classList.add(theme);
   }, [theme]);
 
   const value = useMemo(
