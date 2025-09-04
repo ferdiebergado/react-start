@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTheme } from '@/lib/theme';
+import { useTheme } from '@/features/theme';
 import { Moon, Sun } from 'lucide-react';
 import type { FC } from 'react';
 

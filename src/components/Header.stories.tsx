@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import Header from '@/components/Header';
+import ThemeProvider from '@/features/theme/ThemeProvider';
 import { MemoryRouter } from 'react-router';
-import Header from './Header';
-import ThemeProvider from './ThemeProvider';
 
 const meta = {
   component: Header,

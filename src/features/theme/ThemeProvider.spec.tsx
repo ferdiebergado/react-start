@@ -1,5 +1,5 @@
-import ThemeProvider from '@/components/ThemeProvider';
-import { useTheme, type Theme } from '@/lib/theme';
+import { useTheme, type Theme } from '@/features/theme';
+import ThemeProvider from '@/features/theme/ThemeProvider';
 import type { FC } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';

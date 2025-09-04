@@ -1,7 +1,7 @@
 import App from '@/App';
 import ErrorFallback from '@/components/ErrorFallback';
-import ThemeProvider from '@/components/ThemeProvider';
 import AccountProvider from '@/features/account/AccountProvider';
+import ThemeProvider from '@/features/theme/ThemeProvider';
 import '@/index.css';
 import {
   QueryClient,
