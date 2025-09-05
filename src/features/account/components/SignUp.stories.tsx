@@ -1,18 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-
 import AccountProvider from '@/features/account/AccountProvider';
 import SignUp from '@/features/account/components/SignUp';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router';
 
 const meta = {
   component: SignUp,
   decorators: [
     (Story) => (
-      <AccountProvider>
-        <MemoryRouter>
+      <MemoryRouter>
+        <AccountProvider>
           <Story />
-        </MemoryRouter>
-      </AccountProvider>
+        </AccountProvider>
+      </MemoryRouter>
     ),
   ],
 } satisfies Meta<typeof SignUp>;
