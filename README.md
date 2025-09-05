@@ -29,6 +29,7 @@ A modern React SPA starter template with routing, data fetching, styling, and te
 
 - [React Compiler](https://react.dev/learn/react-compiler) enabled
 - Theme switcher
+- User Account: sign-up, sign-in, password reset and profile
 
 ## Requirements
 
@@ -79,7 +80,7 @@ This starter kit uses **React Router** for handling all client-side routing. The
 
 ```tsx
 <BrowserRouter>
-  <Routes />
+  <App />
 </BrowserRouter>
 ```
 
@@ -90,29 +91,34 @@ All routes are defined in `routes.ts`. To create a route, add a `RouteObject` to
 ```tsx
 // src/routes.tsx
 // omitted for brevity...
-export const routes: RouteObject[] = [
-  {
-    Component: Layout,
-    children: [
-      { index: true, Component: Home },
-      { path: 'signup', Component: SignUp },
-    ],
-  },
+export const paths = {
+  signup: '/signup',
+  signin: '/signin',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
+};
+
+export const routes = [
+  { index: true, Component: Home },
+  { path: paths.signup, Component: SignUp },
+  { path: paths.signin, Component: Login },
+  { path: paths.forgotPassword, Component: ForgotPassword },
+  { path: paths.resetPassword, Component: ResetPassword },
   { path: '*', Component: NotFound },
-];
+] satisfies RouteObject[];
 ```
 
 ### Lazy loading components
 
-Deferring the loading of component’s code until it is rendered for the first time improves performance. To lazy load components, dynamically import components with the `lazy` function from react. Then, set the lazy-loaded component as the value of the `Component` property of the `RouteObject`.
+Deferring the loading of component’s code until it is rendered for the first time improves performance. To lazy load components, dynamically import components with the `lazy` function from `react`. Then, set the lazy-loaded component as the value of the `Component` property of the `RouteObject`.
 
 ```tsx
 const About = lazy(() => import('@/About'));
 
-export const routes: RouteObject[] = [
+export const routes = [
   // existing route objects omitted for brevity...
   { path: 'about', Component: About },
-];
+] satisfies RouteObject[];
 ```
 
 > **Tip:** _Always use absolute paths with path alias when importing for better maintainability. The `@` alias is preconfigured to point to the `src` folder._
@@ -138,23 +144,30 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 const queryClient = new QueryClient();
 
-const App: FC = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary FallbackComponent={ErrorFallback} onReset={reset}>
-            <ThemeProvider>
-              <Router />
-            </ThemeProvider>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
-    </QueryClientProvider>
-  );
-};
+const root = document.getElementById('root');
+if (!root) {
+  throw new Error('root element not found');
+}
 
-export default App;
+createRoot(root).render(
+  <StrictMode>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary FallbackComponent={ErrorFallback} onReset={reset}>
+              <ThemeProvider>
+                <AuthProvider>
+                  <App />
+                </AuthProvider>
+              </ThemeProvider>
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
+      </QueryClientProvider>
+    </BrowserRouter>
+  </StrictMode>
+);
 ```
 
 To fetch data with React Query, first create a custom hook that calls `useQuery` or `useSuspenseQuery`.
@@ -273,6 +286,59 @@ export default App;
 
 To learn more about the available components, how to add, import, and customize them, consult the [shadcn/ui documentation](https://ui.shadcn.com/docs/installation/vite#add-components).
 
+## User Account
+
+Routes and forms for user accounts are already setup. You only need to send a request to your backend.
+The routes are wrapped with an `AuthProvider` that exposes a `useAuth` hook that provide access to the auth context.
+
+```tsx
+<AuthProvider>
+  <App />
+</AuthProvider>
+```
+
+### useAuth hook
+
+The auth context can be retrieved by calling the `useAuth` hook. It returns an object containing the current logged in `user` if it exists together with a `login` and `logout` function.
+
+```tsx
+export interface AuthState {
+  user?: User;
+  login: (user: User) => void;
+  logout: () => void;
+}
+```
+
+### Logging-in a user
+
+To login a user, call the login function in and pass the User object as an argument.
+
+```tsx
+const { login } = useAuth();
+
+const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  try {
+    const res = await fetch('http://localhost:8888/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(creds),
+    });
+
+    if (!res.ok) throw new Error('Login request failed.');
+
+    return (await res.json()) as LoginData;
+
+    login({ name: user.name, email: user.email });
+    toast.success(JSON.stringify('You are now logged in!', undefined, 2));
+  } catch (error) {
+    console.error('Form submission error', error);
+    toast.error('Failed to submit the form. Please try again.');
+  }
+};
+```
+
 ## Stories
 
 This template uses **Storybook** to test and document components. Theme switching support works out of the box. The builtin components on this template have their respective stories.
@@ -306,3 +372,5 @@ For a guide on the concept of stories and to create stories, visit the [storyboo
 - Accessibility Testing: [react-axe](https://www.npmjs.com/package/@axe-core/react)
 - Design shadcn/ui theme: [tweakcn](https://tweakcn.com)
 - Shadcn form builder: [shadcn-form](https://www.shadcn-form.com)
+- Ready to use hooks: [usehooks-ts](https://www.npmjs.com/package/usehooks-ts)
+- Essential typescript types: [ts-essentials](https://www.npmjs.com/package/ts-essentials)
