@@ -145,8 +145,7 @@ const Signin: FC = () => {
       <CardContent>
         <Form {...form}>
           <form
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
             className="space-y-8"
           >
             <div className="grid gap-4">
