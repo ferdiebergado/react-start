@@ -104,13 +104,13 @@ const Signin: FC = () => {
     },
   });
 
-  const { signin: login } = useAccount();
+  const { signin } = useAccount();
   const navigate = useNavigate();
   const location = useLocation();
   const { mutate, isPending } = useMutation({
     mutationFn: signinUser,
     onSuccess: ({ accessToken, tokenType, expiresIn, user: { id, email } }) => {
-      login({
+      signin({
         id,
         email,
         token: { value: accessToken, type: tokenType, expiresIn },
