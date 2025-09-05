@@ -9,10 +9,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
+import { queryKeys } from '@/features/account';
 import { api, ValidationError, type APIResponse } from '@/lib/api';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { memo, type FC } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -85,12 +86,15 @@ const signUpUser: SignupHandler = async ({
   return (await res.json()) as APIResponse<SignUpPayload, undefined>;
 };
 
-const useSignup = () =>
-  useMutation({
+const useSignup = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: signUpUser,
-    onSuccess: ({ message }) => toast.success(message),
-    onError: ({ message }) => toast.error(message),
+    onSuccess: () =>
+      void queryClient.invalidateQueries({ queryKey: queryKeys.accounts }),
   });
+};
 
 const SignInBlock = memo(() => (
   <div className="mt-4 text-center text-sm">
@@ -117,6 +121,7 @@ const SignupForm: FC = () => {
     console.log(values);
 
     mutate(values, {
+      onSuccess: ({ message }) => toast.success(message),
       onError: (serverError) => {
         if (serverError instanceof ValidationError) {
           const { details } = serverError;
@@ -129,6 +134,7 @@ const SignupForm: FC = () => {
             });
           }
         }
+        toast.error(serverError.message);
       },
     });
   };
