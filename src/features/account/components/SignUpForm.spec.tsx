@@ -1,0 +1,66 @@
+import SignupForm from '@/features/account/components/SignupForm';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MemoryRouter } from 'react-router';
+import { toast } from 'sonner';
+import { describe, expect, it, vi, type Mock } from 'vitest';
+import { render } from 'vitest-browser-react';
+
+const renderWithProviders = (ui: React.ReactNode) => {
+  const client = new QueryClient();
+  return render(
+    <MemoryRouter>
+      <QueryClientProvider client={client}>{ui}</QueryClientProvider>
+    </MemoryRouter>
+  );
+};
+
+vi.mock('sonner', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+describe('SignUpForm', () => {
+  it('signs up successfully', async () => {
+    const { getByRole, getByLabelText } = renderWithProviders(<SignupForm />);
+
+    const emailInput = getByLabelText(/email/i);
+    await emailInput.fill('new@mail.com');
+
+    const passwordInput = getByLabelText(/^password$/i);
+    await passwordInput.fill('Password1!');
+
+    const passwordConfirmInput = getByLabelText(/confirm password/i);
+    await passwordConfirmInput.fill('Password1!');
+
+    const submitBtn = getByRole('button', { name: /sign up/i });
+    await submitBtn.click();
+
+    await expect.poll(() => (toast.success as Mock).mock.calls.length).toBe(1);
+    expect(toast.success).toHaveBeenCalledWith('Signup successful');
+  });
+
+  it('shows server side validation errors', async () => {
+    const { getByRole, getByLabelText, getByText } = renderWithProviders(
+      <SignupForm />
+    );
+
+    const emailInput = getByLabelText(/email/i);
+    await emailInput.fill('exists@mail.com');
+
+    const passwordInput = getByLabelText(/^password$/i);
+    await passwordInput.fill('Password1!');
+
+    const passwordConfirmInput = getByLabelText(/confirm password/i);
+    await passwordConfirmInput.fill('Password1!');
+
+    const submitBtn = getByRole('button', { name: /sign up/i });
+    await submitBtn.click();
+
+    await expect.element(getByText(/email already in use/i)).toBeVisible();
+
+    await expect.poll(() => (toast.error as Mock).mock.calls.length).toBe(1);
+    expect(toast.error).toHaveBeenCalledWith('Validation failed');
+  });
+});

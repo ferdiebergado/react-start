@@ -11,6 +11,29 @@ const handlers = [
       author: 'Steve Jobs',
     });
   }),
+
+  http.post('http://localhost:8888/auth/register', async ({ request }) => {
+    const body = (await request.json()) as Record<string, string>;
+    if (body.email === 'exists@mail.com') {
+      return HttpResponse.json(
+        {
+          message: 'Validation failed',
+          error: { email: 'Email already in use' },
+        },
+        { status: 422 }
+      );
+    }
+
+    return HttpResponse.json({
+      message: 'Signup successful',
+      data: {
+        id: '123',
+        email: body.email,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    });
+  }),
 ];
 
 const worker = setupWorker(...handlers);
