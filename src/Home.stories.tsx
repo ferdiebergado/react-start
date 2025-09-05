@@ -60,7 +60,7 @@ export const ServerError: Story = {
       handlers: [
         http.get('https://dummyjson.com/quotes/random', async () => {
           await delay(800);
-          return new HttpResponse(null, {
+          return new HttpResponse(undefined, {
             status: 503,
           });
         }),

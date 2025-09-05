@@ -58,7 +58,7 @@ const LoginBlock = memo(() => (
   </div>
 ));
 
-type SignupForm = z.infer<typeof formSchema>
+type SignupForm = z.infer<typeof formSchema>;
 
 const SignUp: FC = () => {
   const form = useForm<SignupForm>({
@@ -74,7 +74,7 @@ const SignUp: FC = () => {
     try {
       // Assuming an async registration function
       console.log(values);
-      toast.success(JSON.stringify(values, null, 2));
+      toast.success(JSON.stringify(values, undefined, 2));
     } catch (error) {
       console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');
