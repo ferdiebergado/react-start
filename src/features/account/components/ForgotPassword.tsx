@@ -26,17 +26,17 @@ const formSchema = z
   })
   .required({ email: true });
 
-type ForgetPasswordFormData = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 export default function ForgetPasswordPreview() {
-  const form = useForm<ForgetPasswordFormData>({
+  const form = useForm<FormValues>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
     },
   });
 
-  function onSubmit(values: ForgetPasswordFormData) {
+  function onSubmit(values: FormValues) {
     try {
       // Assuming a function to send reset email
       console.log(values);

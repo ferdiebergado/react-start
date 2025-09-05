@@ -93,10 +93,10 @@ async function signinUser(creds: Credentials): Promise<SigninData> {
   return (await res.json()) as SigninData;
 }
 
-type SignInFormData = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 const Signin: FC = () => {
-  const form = useForm<SignInFormData>({
+  const form = useForm<FormValues>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
@@ -130,7 +130,7 @@ const Signin: FC = () => {
     },
   });
 
-  const onSubmit = (values: SignInFormData) => {
+  const onSubmit = (values: FormValues) => {
     mutate(values);
   };
 
