@@ -1,5 +1,5 @@
 import App from '@/App';
-import ErrorFallback from '@/components/ErrorFallback';
+import ErrorFallback from '@/components/error/ErrorFallback';
 import AccountProvider from '@/features/account/AccountProvider';
 import ThemeProvider from '@/features/theme/ThemeProvider';
 import '@/index.css';

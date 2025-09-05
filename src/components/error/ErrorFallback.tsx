@@ -1,4 +1,4 @@
-import ErrorWrapper from '@/components/ErrorWrapper';
+import ErrorWrapper from '@/components/error/ErrorWrapper';
 import { Button } from '@/components/ui/button';
 import type { FC } from 'react';
 import type { FallbackProps } from 'react-error-boundary';

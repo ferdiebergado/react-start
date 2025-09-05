@@ -1,10 +1,10 @@
-import ModeToggle from '@/components/ModeToggle';
-import NavigationLink from '@/components/NavigationLink';
+import NavigationLink from '@/components/navigation/NavigationLink';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
+import ModeToggle from '@/features/theme/ModeToggle';
 import { paths } from '@/routes';
 import type { FC } from 'react';
 

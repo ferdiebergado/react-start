@@ -1,4 +1,4 @@
-import ErrorFallback from '@/components/ErrorFallback';
+import ErrorFallback from '@/components/error/ErrorFallback';
 import Home from '@/Home';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {

@@ -1,4 +1,4 @@
-import NavigationLink from '@/components/NavigationLink';
+import NavigationLink from '@/components/navigation/NavigationLink';
 import {
   NavigationMenu,
   NavigationMenuItem,

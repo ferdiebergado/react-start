@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 
-import ErrorFallback from '@/components/ErrorFallback';
+import ErrorFallback from '@/components/error/ErrorFallback';
 
 describe('ErrorFallback', () => {
   it('renders the error message and a "Try again" button', async () => {

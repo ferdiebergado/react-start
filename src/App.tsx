@@ -1,6 +1,6 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import Spinner from '@/components/Spinner';
+import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
+import Spinner from '@/components/navigation/Spinner';
 import { routes } from '@/routes';
 import { Suspense, type FC } from 'react';
 import { useRoutes } from 'react-router';

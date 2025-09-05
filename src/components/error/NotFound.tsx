@@ -1,4 +1,4 @@
-import ErrorWrapper from '@/components/ErrorWrapper';
+import ErrorWrapper from '@/components/error/ErrorWrapper';
 import { type FC } from 'react';
 
 const NotFound: FC = () => {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import NavigationLink from '@/components/NavigationLink';
+import NavigationLink from '@/components/navigation/NavigationLink';
 import {
   NavigationMenu,
   NavigationMenuItem,

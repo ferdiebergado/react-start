@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import ErrorFallback from '@/components/ErrorFallback';
+import ErrorFallback from '@/components/error/ErrorFallback';
 import { fn } from 'storybook/internal/test';
 
 const meta = {
