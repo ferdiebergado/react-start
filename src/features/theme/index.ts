@@ -3,11 +3,11 @@ import { createContext, use } from 'react';
 export type Theme = 'dark' | 'light' | 'system';
 
 export function isTheme(value: unknown): value is Theme {
-  return (
-    (typeof value === 'string' && value === 'dark') ||
-    value === 'light' ||
-    value === 'system'
-  );
+  if (value === null || typeof value !== 'string') {
+    return false;
+  }
+
+  return value === 'dark' || value === 'light' || value === 'system';
 }
 
 interface ThemeProviderState {
