@@ -30,3 +30,7 @@ export function useAccount() {
 
   return context;
 }
+
+export const queryKeys = {
+  accounts: ['accounts'],
+};
