@@ -58,10 +58,10 @@ const LoginBlock = memo(() => (
   </div>
 ));
 
-type SignupForm = z.infer<typeof formSchema>;
+type SignUpFormData = z.infer<typeof formSchema>;
 
 const SignUp: FC = () => {
-  const form = useForm<SignupForm>({
+  const form = useForm<SignUpFormData>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
@@ -70,7 +70,7 @@ const SignUp: FC = () => {
     },
   });
 
-  const onSubmit = (values: SignupForm) => {
+  const onSubmit = (values: SignUpFormData) => {
     try {
       // Assuming an async registration function
       console.log(values);
