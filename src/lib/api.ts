@@ -1,10 +1,10 @@
 const BASEURL = 'http://localhost:8888';
 
-export interface APIResponse<T, E> {
-  message: string;
-  data?: T;
-  error?: E;
-}
+export type APIResponse<T, E> =
+  | { message: string; data?: T; error?: undefined }
+  | { message: string; error: E; data?: undefined };
+
+export type ErrorResponse = APIResponse<undefined, undefined>;
 
 const httpMethod = {
   get: 'GET',
