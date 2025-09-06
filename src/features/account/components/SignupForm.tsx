@@ -15,7 +15,7 @@ import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { memo, type FC } from 'react';
+import { memo, type FC, type FormEventHandler } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router';
 import { toast } from 'sonner';
@@ -139,12 +139,13 @@ const SignupForm: FC = () => {
     });
   };
 
+  const handleSubmit: FormEventHandler<HTMLFormElement> =
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    form.handleSubmit(onSubmit);
+
   return (
     <Form {...form}>
-      <form
-        onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="space-y-8"
-      >
+      <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid gap-4">
           {/* Email Field */}
           <FormField
