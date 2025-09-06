@@ -16,7 +16,6 @@ import {
   type APIResponse,
   type ErrorResponse,
 } from '@/lib/api';
-import { isFromRouteState } from '@/lib/utils';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
@@ -103,11 +102,9 @@ const useSignIn = () => {
           token: { value: accessToken, type: tokenType, expiresIn },
         });
 
-        let redirectPath = '/';
-        if (isFromRouteState(location.state)) {
-          redirectPath = location.state.from;
-        }
-        navigate(redirectPath);
+        const locationState = location.state as { from?: string } | undefined;
+        const intendedURL = locationState?.from ?? '/';
+        navigate(intendedURL, { replace: true });
       }
     },
   });
