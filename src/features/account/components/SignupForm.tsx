@@ -10,7 +10,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { queryKeys } from '@/features/account';
-import { api, ValidationError, type APIResponse } from '@/lib/api';
+import {
+  api,
+  ValidationError,
+  type APIResponse,
+  type ErrorResponse,
+} from '@/lib/api';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -48,42 +53,31 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface SignUpPayload {
+interface SignUpData {
   id: string;
   email: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-type SignupHandler = (
-  data: FormValues
-) => Promise<APIResponse<SignUpPayload, undefined>>;
+type SuccessResponse = APIResponse<SignUpData, undefined>;
+type ValidationErrorResponse = APIResponse<undefined, FormValues>;
 
-const signUpUser: SignupHandler = async ({
-  email,
-  password,
-  confirmPassword,
-}) => {
-  const res = await api.post('/auth/register', {
-    email,
-    password,
-    password_confirm: confirmPassword,
-  });
+type SignupHandler = (data: FormValues) => Promise<SuccessResponse>;
+const signUpUser: SignupHandler = async (data) => {
+  const res = await api.post('/auth/register', data);
 
   if (!res.ok) {
     if (res.status === 422) {
-      const { message, error } = (await res.json()) as APIResponse<
-        undefined,
-        FormValues
-      >;
-      throw new ValidationError(message, error);
+      const { message, error } = (await res.json()) as ValidationErrorResponse;
+      if (error) throw new ValidationError(message, error);
     }
 
-    const err = (await res.json()) as APIResponse<undefined, undefined>;
-    throw new Error(err.message);
+    const { message } = (await res.json()) as ErrorResponse;
+    throw new Error(message);
   }
 
-  return (await res.json()) as APIResponse<SignUpPayload, undefined>;
+  return (await res.json()) as SuccessResponse;
 };
 
 const useSignup = () => {
@@ -105,8 +99,8 @@ const SignInBlock = memo(() => (
   </div>
 ));
 
-const SignupForm: FC = () => {
-  const form = useForm<FormValues>({
+const useSignUpForm = () =>
+  useForm<FormValues>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
@@ -115,6 +109,8 @@ const SignupForm: FC = () => {
     },
   });
 
+const SignupForm: FC = () => {
+  const form = useSignUpForm();
   const { mutate, isPending } = useSignup();
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
@@ -124,7 +120,7 @@ const SignupForm: FC = () => {
       onSuccess: ({ message }) => toast.success(message),
       onError: (serverError) => {
         if (serverError instanceof ValidationError) {
-          const { details } = serverError;
+          const { details } = serverError as ValidationError<FormValues>;
           if (details) {
             Object.entries(details).forEach(([field, message]) => {
               form.setError(field as keyof FormValues, {
