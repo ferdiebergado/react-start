@@ -16,6 +16,7 @@ import {
   type APIResponse,
   type ErrorResponse,
 } from '@/lib/api';
+import { replaceFormErrors } from '@/lib/utils';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -120,15 +121,7 @@ const SignupForm: FC = () => {
       onSuccess: ({ message }) => toast.success(message),
       onError: (serverError) => {
         if (serverError instanceof ValidationError) {
-          const { details } = serverError as ValidationError<FormValues>;
-          if (details) {
-            Object.entries(details).forEach(([field, message]) => {
-              form.setError(field as keyof FormValues, {
-                type: 'server',
-                message,
-              });
-            });
-          }
+          replaceFormErrors(form, serverError.details ?? {});
         }
         toast.error(serverError.message);
       },
