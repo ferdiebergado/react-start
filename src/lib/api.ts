@@ -99,11 +99,11 @@ class APIClient implements HTTPClient {
 
 export const api = new APIClient(BASEURL);
 
-export class ValidationError extends Error {
+export class ValidationError<T> extends Error {
   name: string;
-  details?: Record<string, string>;
+  details?: Partial<T>;
 
-  constructor(message: string, details?: Record<string, string>) {
+  constructor(message: string, details?: Partial<T>) {
     super(message);
     this.details = details;
     this.name = 'ValidationError';
