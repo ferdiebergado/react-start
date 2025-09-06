@@ -23,25 +23,21 @@ interface RequestOpts {
   opts?: RequestInit;
 }
 
+type RequestBodyHandler = (
+  path: string,
+  body: RequestData,
+  opts?: RequestInit
+) => Promise<Response>;
+
+type RequestHandler = (path: string, opts?: RequestInit) => Promise<Response>;
+
 interface HTTPClient {
   doRequest: (opts: RequestOpts) => Promise<Response>;
-  get: (path: string, opts?: RequestInit) => Promise<Response>;
-  post: (
-    path: string,
-    body: RequestData,
-    opts?: RequestInit
-  ) => Promise<Response>;
-  put: (
-    path: string,
-    body: RequestData,
-    opts?: RequestInit
-  ) => Promise<Response>;
-  patch: (
-    path: string,
-    body: RequestData,
-    opts?: RequestInit
-  ) => Promise<Response>;
-  delete: (path: string, opts?: RequestInit) => Promise<Response>;
+  get: RequestHandler;
+  post: RequestBodyHandler;
+  put: RequestBodyHandler;
+  patch: RequestBodyHandler;
+  delete: RequestHandler;
 }
 
 class APIClient implements HTTPClient {
