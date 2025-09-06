@@ -31,13 +31,12 @@ export const routes = [
     children: [{ path: paths.home, Component: Home }],
   },
   {
-    path: '/account',
     Component: AccountLayout,
     children: [
-      { path: 'signup', Component: SignUp },
-      { path: 'signin', Component: SignIn },
-      { path: 'forgot-password', Component: ForgotPassword },
-      { path: 'reset-password', Component: ResetPassword },
+      { path: paths.account.signup, Component: SignUp },
+      { path: paths.account.signin, Component: SignIn },
+      { path: paths.account.forgotPassword, Component: ForgotPassword },
+      { path: paths.account.resetPassword, Component: ResetPassword },
     ],
   },
   { path: paths.notFound, Component: NotFound },
