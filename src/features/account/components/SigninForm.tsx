@@ -103,7 +103,7 @@ const useSignIn = () => {
         });
 
         const locationState = location.state as { from?: string } | undefined;
-        const intendedURL = locationState?.from ?? '/';
+        const intendedURL = locationState?.from ?? paths.home;
         navigate(intendedURL, { replace: true });
       }
     },
@@ -112,7 +112,7 @@ const useSignIn = () => {
 
 const ForgotPasswordBlock = memo(() => (
   <Link
-    to={paths.forgotPassword}
+    to={paths.account.forgotPassword}
     className="ml-auto inline-block text-sm underline"
   >
     Forgot your password?

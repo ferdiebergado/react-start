@@ -13,7 +13,7 @@ import { Link } from 'react-router';
 const SignUpBlock = memo(() => (
   <div className="mt-4 text-center text-sm">
     Don&apos;t have an account?{' '}
-    <Link to={paths.signup} className="underline">
+    <Link to={paths.account.signup} className="underline">
       Sign up
     </Link>
   </div>
@@ -21,7 +21,7 @@ const SignUpBlock = memo(() => (
 
 const Signin: FC = () => {
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto w-full max-w-sm">
       <CardHeader>
         <CardTitle className="text-2xl">Signin</CardTitle>
         <CardDescription>

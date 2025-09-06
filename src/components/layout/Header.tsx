@@ -5,7 +5,6 @@ import {
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
 import ModeToggle from '@/features/theme/ModeToggle';
-import { paths } from '@/routes';
 import type { FC } from 'react';
 
 const Header: FC = () => {
@@ -21,16 +20,6 @@ const Header: FC = () => {
           <NavigationMenuItem>
             <NavigationLink to="/about" end>
               About
-            </NavigationLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationLink to={paths.signup} end>
-              Sign Up
-            </NavigationLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationLink to={paths.signin} end>
-              Login
             </NavigationLink>
           </NavigationMenuItem>
           <NavigationMenuItem>

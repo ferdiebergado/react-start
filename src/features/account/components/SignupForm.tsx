@@ -93,7 +93,7 @@ const useSignup = () => {
 const SignInBlock = memo(() => (
   <div className="mt-4 text-center text-sm">
     Already have an account?{' '}
-    <Link to={paths.signin} className="underline underline-offset-4">
+    <Link to={paths.account.signin} className="underline underline-offset-4">
       Sign In
     </Link>
   </div>
