@@ -17,12 +17,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { useAccount, type User } from '@/features/account';
-import { api, ValidationError, type APIResponse } from '@/lib/api';
+import {
+  api,
+  ValidationError,
+  type APIResponse,
+  type ErrorResponse,
+} from '@/lib/api';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { memo, type FC } from 'react';
+import { memo, type FC, type FormEventHandler } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
@@ -46,14 +51,6 @@ const SignUpBlock = memo(() => (
   </div>
 ));
 
-interface SigninData {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
-  expiresIn: number;
-  user: User;
-}
-
 interface RouteState {
   from: string;
 }
@@ -75,34 +72,43 @@ const formSchema = z
     password: true,
   });
 
+type FormValues = z.infer<typeof formSchema>;
+
+interface SigninData {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string;
+  expiresIn: number;
+  user: User;
+}
+
+type SuccessResponse = APIResponse<SigninData, undefined>;
+type ValidationErrorResponse = APIResponse<undefined, FormValues>;
+type SigninHandler = (creds: Credentials) => Promise<SuccessResponse>;
+
 interface Credentials {
   email: string;
   password: string;
 }
 
-async function signinUser(creds: Credentials): Promise<SigninData> {
+const signinUser: SigninHandler = async (creds) => {
   const res = await api.post('/auth/login', creds);
 
   if (!res.ok) {
     if (res.status === 422) {
-      const { message, error } = (await res.json()) as APIResponse<
-        undefined,
-        FormValues
-      >;
-      throw new ValidationError(message, error);
+      const { message, error } = (await res.json()) as ValidationErrorResponse;
+      if (error) throw new ValidationError(message, error);
     }
 
-    const err = (await res.json()) as APIResponse<undefined, undefined>;
-    throw new Error(err.message);
+    const { message } = (await res.json()) as ErrorResponse;
+    throw new Error(message);
   }
 
-  return (await res.json()) as SigninData;
-}
+  return (await res.json()) as SuccessResponse;
+};
 
-type FormValues = z.infer<typeof formSchema>;
-
-const Signin: FC = () => {
-  const form = useForm<FormValues>({
+const useSignInForm = () =>
+  useForm<FormValues>({
     resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
@@ -110,35 +116,67 @@ const Signin: FC = () => {
     },
   });
 
+const useSignIn = () => {
   const { signin } = useAccount();
   const navigate = useNavigate();
   const location = useLocation();
-  const { mutate, isPending } = useMutation({
+
+  return useMutation({
     mutationFn: signinUser,
-    onSuccess: ({ accessToken, tokenType, expiresIn, user: { id, email } }) => {
-      signin({
-        id,
-        email,
-        token: { value: accessToken, type: tokenType, expiresIn },
-      });
+    onSuccess: ({ data }) => {
+      if (data) {
+        const {
+          accessToken,
+          tokenType,
+          expiresIn,
+          user: { id, email },
+        } = data;
 
-      toast.success('You are now signed in!');
+        signin({
+          id,
+          email,
+          token: { value: accessToken, type: tokenType, expiresIn },
+        });
 
-      let redirectPath = '/';
-      if (isRouteState(location.state)) {
-        redirectPath = location.state.from;
+        let redirectPath = '/';
+        if (isRouteState(location.state)) {
+          redirectPath = location.state.from;
+        }
+        navigate(redirectPath);
       }
-      navigate(redirectPath);
-    },
-    onError: (error) => {
-      console.error('Form submission error', error);
-      toast.error('Failed to submit the form. Please try again.');
     },
   });
+};
+
+const Signin: FC = () => {
+  const form = useSignInForm();
+  const { mutate, isPending } = useSignIn();
 
   const onSubmit = (values: FormValues) => {
-    mutate(values);
+    mutate(values, {
+      onSuccess: ({ message }) => {
+        toast.success(message);
+      },
+      onError: (serverError) => {
+        if (serverError instanceof ValidationError) {
+          const { details } = serverError as ValidationError<FormValues>;
+          if (details) {
+            Object.entries(details).forEach(([field, message]) => {
+              form.setError(field as keyof FormValues, {
+                type: 'server',
+                message,
+              });
+            });
+          }
+        }
+        toast.error(serverError.message);
+      },
+    });
   };
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> =
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    form.handleSubmit(onSubmit);
 
   return (
     <Card className="mx-auto max-w-sm">
@@ -150,10 +188,7 @@ const Signin: FC = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-            className="space-y-8"
-          >
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid gap-4">
               <FormField
                 control={form.control}
