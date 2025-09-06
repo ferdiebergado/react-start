@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { useAccount, type User } from '@/features/account';
+import { api, ValidationError, type APIResponse } from '@/lib/api';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
@@ -80,15 +81,20 @@ interface Credentials {
 }
 
 async function signinUser(creds: Credentials): Promise<SigninData> {
-  const res = await fetch('http://localhost:8888/auth/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(creds),
-  });
+  const res = await api.post('/auth/login', creds);
 
-  if (!res.ok) throw new Error('Signin request failed.');
+  if (!res.ok) {
+    if (res.status === 422) {
+      const { message, error } = (await res.json()) as APIResponse<
+        undefined,
+        FormValues
+      >;
+      throw new ValidationError(message, error);
+    }
+
+    const err = (await res.json()) as APIResponse<undefined, undefined>;
+    throw new Error(err.message);
+  }
 
   return (await res.json()) as SigninData;
 }
