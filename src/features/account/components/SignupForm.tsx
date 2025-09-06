@@ -74,7 +74,7 @@ const signUpUser: SignupHandler = async ({
     if (res.status === 422) {
       const { message, error } = (await res.json()) as APIResponse<
         undefined,
-        Record<string, string>
+        FormValues
       >;
       throw new ValidationError(message, error);
     }
