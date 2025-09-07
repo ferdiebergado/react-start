@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import SignupBlock from '@/features/account/components/SignUpBlock';
 import SignupForm from '@/features/account/components/SignupForm';
 import { type FC } from 'react';
 
@@ -19,6 +20,7 @@ const SignUp: FC = () => {
       </CardHeader>
       <CardContent>
         <SignupForm />
+        <SignupBlock />
       </CardContent>
     </Card>
   );

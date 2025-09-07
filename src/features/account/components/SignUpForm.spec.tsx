@@ -1,7 +1,6 @@
-import { paths, routes } from '@/routes';
+import SignupForm from '@/features/account/components/SignupForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { FC } from 'react';
-import { MemoryRouter, useRoutes } from 'react-router';
+import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { render } from 'vitest-browser-react';
@@ -14,25 +13,17 @@ vi.mock('sonner', () => ({
   Toaster: vi.fn(),
 }));
 
-const TestApp: FC = () => {
-  return useRoutes(routes);
-};
-
-const renderWithProviders = () => {
+const renderWithProviders = (ui: ReactNode) => {
   const client = new QueryClient();
 
   return render(
-    <MemoryRouter initialEntries={[paths.account.signup]}>
-      <QueryClientProvider client={client}>
-        <TestApp />
-      </QueryClientProvider>
-    </MemoryRouter>
+    <QueryClientProvider client={client}>{ui}</QueryClientProvider>
   );
 };
 
 describe('SignUpForm', () => {
   it('signs up successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders();
+    const { getByRole, getByLabelText } = renderWithProviders(<SignupForm />);
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('new@mail.com');
@@ -51,7 +42,9 @@ describe('SignUpForm', () => {
   });
 
   it('shows server side validation errors', async () => {
-    const { getByRole, getByLabelText, getByText } = renderWithProviders();
+    const { getByRole, getByLabelText, getByText } = renderWithProviders(
+      <SignupForm />
+    );
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('exists@mail.com');

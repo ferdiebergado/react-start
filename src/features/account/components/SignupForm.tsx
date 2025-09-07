@@ -17,13 +17,11 @@ import {
   type ErrorResponse,
 } from '@/lib/api';
 import { replaceFormErrors } from '@/lib/utils';
-import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { memo, type FC, type FormEventHandler } from 'react';
+import { type FC, type FormEventHandler } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -90,15 +88,6 @@ const useSignup = () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.accounts }),
   });
 };
-
-const SignInBlock = memo(() => (
-  <div className="mt-4 text-center text-sm">
-    Already have an account?{' '}
-    <Link to={paths.account.signin} className="underline underline-offset-4">
-      Sign In
-    </Link>
-  </div>
-));
 
 const useSignUpForm = () =>
   useForm<FormValues>({
@@ -210,7 +199,6 @@ const SignupForm: FC = () => {
           </Button>
         </div>
       </form>
-      <SignInBlock />
     </Form>
   );
 };
