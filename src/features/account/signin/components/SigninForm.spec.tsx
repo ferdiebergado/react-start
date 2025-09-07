@@ -44,10 +44,8 @@ describe('SigninForm', () => {
     expect(toast.success).toHaveBeenCalledWith('Sign in successful');
   });
 
-  it('shows server side validation errors', async () => {
-    const { getByRole, getByLabelText, getByText } = renderWithProviders(
-      <SigninForm />
-    );
+  it('shows server side errors', async () => {
+    const { getByRole, getByLabelText } = renderWithProviders(<SigninForm />);
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('unknown@mail.com');
