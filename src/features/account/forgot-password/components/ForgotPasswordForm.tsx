@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
@@ -16,7 +17,6 @@ import { ValidationError } from '@/lib/api';
 import { replaceFormErrors } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
 import type { FC } from 'react';
-import { Form } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const ForgotPasswordForm: FC = () => {
@@ -28,7 +28,8 @@ const ForgotPasswordForm: FC = () => {
       onSuccess: ({ message }) => toast.success(message),
       onError: (serverError) => {
         if (serverError instanceof ValidationError) {
-          replaceFormErrors(form, serverError.details ?? {});
+          const errors = serverError.details ?? {};
+          replaceFormErrors(form, errors);
         }
         toast.error(serverError.message);
       },
