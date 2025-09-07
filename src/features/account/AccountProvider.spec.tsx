@@ -1,5 +1,6 @@
 import { useAccount, type User } from '@/features/account';
 import AccountProvider from '@/features/account/AccountProvider';
+import type { FC } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, renderHook } from 'vitest-browser-react';
 
@@ -9,7 +10,7 @@ const mockUser: User = {
   token: { value: 'token', type: 'Bearer', expiresIn: 18000 },
 };
 
-function AccountConsumer() {
+const AccountConsumer: FC = () => {
   const { user, signin, signout } = useAccount();
 
   const handleSignin = () => {
@@ -29,25 +30,25 @@ function AccountConsumer() {
       </button>
     </div>
   );
-}
+};
+
+const renderWithProvider = () => {
+  return render(
+    <AccountProvider>
+      <AccountConsumer />
+    </AccountProvider>
+  );
+};
 
 describe('AccountProvider', () => {
   it('provides default state', async () => {
-    const { getByTestId } = render(
-      <AccountProvider>
-        <AccountConsumer />
-      </AccountProvider>
-    );
+    const { getByTestId } = renderWithProvider();
 
     await expect.element(getByTestId('user')).toHaveTextContent('no user');
   });
 
   it('can signin and signout', async () => {
-    const { getByTestId } = render(
-      <AccountProvider>
-        <AccountConsumer />
-      </AccountProvider>
-    );
+    const { getByTestId } = renderWithProvider();
 
     const signinBtn = getByTestId('login');
     await signinBtn.click();
