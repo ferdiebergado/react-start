@@ -34,6 +34,22 @@ const handlers = [
       },
     });
   }),
+
+  http.post('http://localhost:8888/auth/login', async ({ request }) => {
+    const body = (await request.json()) as Record<string, string>;
+    if (body.email === 'exists@mail.com') {
+      return HttpResponse.json({
+        message: 'Sign in successful',
+      });
+    }
+
+    return HttpResponse.json(
+      {
+        message: 'Invalid username/password',
+      },
+      { status: 401 }
+    );
+  }),
 ];
 
 const worker = setupWorker(...handlers);
