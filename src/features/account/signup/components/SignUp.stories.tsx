@@ -1,5 +1,5 @@
 import AccountProvider from '@/features/account/AccountProvider';
-import SignUp from '@/features/account/components/SignUp';
+import SignUp from '@/features/account/signup/components/SignUp';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router';
 

@@ -1,4 +1,4 @@
-import SignupForm from '@/features/account/components/SignupForm';
+import SignupForm from '@/features/account/signup/components/SignupForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { toast } from 'sonner';

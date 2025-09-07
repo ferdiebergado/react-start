@@ -2,7 +2,7 @@ import { paths } from '@/routes';
 import type { FC } from 'react';
 import { Link } from 'react-router';
 
-const SignupBlock: FC = () => {
+const SigninBlock: FC = () => {
   return (
     <div className="mt-4 text-center text-sm">
       Already have an account?{' '}
@@ -13,4 +13,4 @@ const SignupBlock: FC = () => {
   );
 };
 
-export default SignupBlock;
+export default SigninBlock;
