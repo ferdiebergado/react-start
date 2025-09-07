@@ -14,7 +14,7 @@ import type { FormValues } from '@/features/account/signup/types';
 import { ValidationError } from '@/lib/api';
 import { replaceFormErrors } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
-import { type FC, type FormEventHandler } from 'react';
+import { type FC } from 'react';
 import { type SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -36,13 +36,9 @@ const SignupForm: FC = () => {
     });
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> =
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    form.handleSubmit(onSubmit);
-
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid gap-4">
           {/* Email Field */}
           <FormField

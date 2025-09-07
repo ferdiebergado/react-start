@@ -21,7 +21,7 @@ import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { memo, type FC, type FormEventHandler } from 'react';
+import { memo, type FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
@@ -138,13 +138,9 @@ const SigninForm: FC = () => {
     });
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> =
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    form.handleSubmit(onSubmit);
-
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid gap-4">
           <FormField
             control={form.control}
