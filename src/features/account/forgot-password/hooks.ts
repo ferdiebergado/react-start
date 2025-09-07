@@ -26,9 +26,8 @@ const recoverPassword: ForgotPasswordHandler = async (email) => {
   return (await res.json()) as SuccessResponse;
 };
 
-export const useForgotPassword = () => {
-  return useMutation({ mutationFn: recoverPassword });
-};
+export const useForgotPassword = () =>
+  useMutation({ mutationFn: recoverPassword });
 
 export const useForgotPasswordForm = () =>
   useForm<FormValues>({
