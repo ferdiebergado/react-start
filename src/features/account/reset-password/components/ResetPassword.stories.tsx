@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import ResetPassword from '@/features/account/components/ResetPassword';
+import ResetPassword from '@/features/account/reset-password/components/ResetPassword';
 
 const meta = {
   component: ResetPassword,

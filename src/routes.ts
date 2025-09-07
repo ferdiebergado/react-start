@@ -15,7 +15,7 @@ const ForgotPassword = lazy(
   () => import('@/features/account/forgot-password/components/ForgotPassword')
 );
 const ResetPassword = lazy(
-  () => import('@/features/account/components/ResetPassword')
+  () => import('@/features/account/reset-password/components/ResetPassword')
 );
 
 export const paths = {
