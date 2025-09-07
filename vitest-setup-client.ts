@@ -50,6 +50,23 @@ const handlers = [
       { status: 401 }
     );
   }),
+
+  http.post('http://localhost:8888/auth/forgot', async ({ request }) => {
+    const body = (await request.json()) as Record<string, string>;
+    if (body.email === 'invalid@mail.com') {
+      return HttpResponse.json(
+        {
+          message: 'Invalid input',
+          error: { email: 'email is not a valid email address' },
+        },
+        { status: 422 }
+      );
+    }
+
+    return HttpResponse.json({
+      message: 'Password reset link sent successfully',
+    });
+  }),
 ];
 
 const worker = setupWorker(...handlers);
