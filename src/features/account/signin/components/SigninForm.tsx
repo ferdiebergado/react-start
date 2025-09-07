@@ -87,7 +87,7 @@ const SigninForm: FC = () => {
                 Signing in...
               </>
             ) : (
-              'Signin'
+              'Sign In'
             )}
           </Button>
           <Button variant="outline" className="w-full">
