@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router';
 import { toast } from 'sonner';
 import { describe, expect, it, vi, type Mock } from 'vitest';
@@ -15,13 +14,15 @@ vi.mock('sonner', () => ({
   Toaster: vi.fn(),
 }));
 
-const renderWithProviders = (ui: ReactNode) => {
+const renderWithProviders = () => {
   const client = new QueryClient();
 
   return render(
     <MemoryRouter>
       <QueryClientProvider client={client}>
-        <AccountProvider>{ui}</AccountProvider>
+        <AccountProvider>
+          <SigninForm />
+        </AccountProvider>
       </QueryClientProvider>
     </MemoryRouter>
   );
@@ -29,7 +30,7 @@ const renderWithProviders = (ui: ReactNode) => {
 
 describe('SigninForm', () => {
   it('signs in successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders(<SigninForm />);
+    const { getByRole, getByLabelText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('exists@mail.com');
@@ -45,7 +46,7 @@ describe('SigninForm', () => {
   });
 
   it('shows server side errors', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders(<SigninForm />);
+    const { getByRole, getByLabelText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('unknown@mail.com');

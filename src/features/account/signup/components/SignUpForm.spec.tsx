@@ -1,6 +1,5 @@
 import SignupForm from '@/features/account/signup/components/SignupForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { render } from 'vitest-browser-react';
@@ -13,17 +12,19 @@ vi.mock('sonner', () => ({
   Toaster: vi.fn(),
 }));
 
-const renderWithProviders = (ui: ReactNode) => {
+const renderWithProviders = () => {
   const client = new QueryClient();
 
   return render(
-    <QueryClientProvider client={client}>{ui}</QueryClientProvider>
+    <QueryClientProvider client={client}>
+      <SignupForm />
+    </QueryClientProvider>
   );
 };
 
 describe('SignUpForm', () => {
   it('signs up successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders(<SignupForm />);
+    const { getByRole, getByLabelText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('new@mail.com');
@@ -42,9 +43,7 @@ describe('SignUpForm', () => {
   });
 
   it('shows server side validation errors', async () => {
-    const { getByRole, getByLabelText, getByText } = renderWithProviders(
-      <SignupForm />
-    );
+    const { getByRole, getByLabelText, getByText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('exists@mail.com');

@@ -1,6 +1,5 @@
 import ResetPasswordForm from '@/features/account/reset-password/components/ResetPasswordForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { render } from 'vitest-browser-react';
@@ -13,19 +12,19 @@ vi.mock('sonner', () => ({
   Toaster: vi.fn(),
 }));
 
-const renderWithProviders = (ui: ReactNode) => {
+const renderWithProviders = () => {
   const client = new QueryClient();
 
   return render(
-    <QueryClientProvider client={client}>{ui}</QueryClientProvider>
+    <QueryClientProvider client={client}>
+      <ResetPasswordForm />
+    </QueryClientProvider>
   );
 };
 
 describe('ResetPasswordForm', () => {
   it('resets password successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders(
-      <ResetPasswordForm />
-    );
+    const { getByRole, getByLabelText } = renderWithProviders();
 
     const passwordInput = getByLabelText(/^new password$/i);
     await passwordInput.fill('Password1!');
@@ -41,9 +40,7 @@ describe('ResetPasswordForm', () => {
   });
 
   it('shows server side validation errors', async () => {
-    const { getByRole, getByLabelText, getByText } = renderWithProviders(
-      <ResetPasswordForm />
-    );
+    const { getByRole, getByLabelText, getByText } = renderWithProviders();
 
     const passwordInput = getByLabelText(/^new password$/i);
     await passwordInput.fill('Password2');

@@ -1,6 +1,5 @@
 import AccountProvider from '@/features/account/AccountProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { render } from 'vitest-browser-react';
@@ -14,21 +13,21 @@ vi.mock('sonner', () => ({
   Toaster: vi.fn(),
 }));
 
-const renderWithProviders = (ui: ReactNode) => {
+const renderWithProviders = () => {
   const client = new QueryClient();
 
   return render(
     <QueryClientProvider client={client}>
-      <AccountProvider>{ui}</AccountProvider>
+      <AccountProvider>
+        <ForgotPasswordForm />
+      </AccountProvider>
     </QueryClientProvider>
   );
 };
 
 describe('ForgotPasswordForm', () => {
-  it('sends reset successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders(
-      <ForgotPasswordForm />
-    );
+  it('sends reset link successfully', async () => {
+    const { getByRole, getByLabelText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('exists@mail.com');
@@ -43,9 +42,7 @@ describe('ForgotPasswordForm', () => {
   });
 
   it('shows server side validation errors', async () => {
-    const { getByRole, getByLabelText, getByText } = renderWithProviders(
-      <ForgotPasswordForm />
-    );
+    const { getByRole, getByLabelText, getByText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('invalid@mail.com');
