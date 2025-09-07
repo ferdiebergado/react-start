@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import AccountProvider from '@/features/account/AccountProvider';
-import Signin from '@/features/account/components/Signin';
+import Signin from '@/features/account/signin/components/Signin';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router';
 

@@ -8,7 +8,9 @@ const NotFound = lazy(() => import('@/components/error/NotFound'));
 const SignUp = lazy(
   () => import('@/features/account/signup/components/SignUp')
 );
-const SignIn = lazy(() => import('@/features/account/components/Signin'));
+const SignIn = lazy(
+  () => import('@/features/account/signin/components/Signin')
+);
 const ForgotPassword = lazy(
   () => import('@/features/account/components/ForgotPassword')
 );
