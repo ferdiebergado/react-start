@@ -4,44 +4,44 @@ import type { FC } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 
+const ThemeConsumer: FC = () => {
+  const { theme, setTheme } = useTheme();
+  return (
+    <div>
+      <span data-testid="theme">{theme}</span>
+      <button
+        type="button"
+        onClick={() => {
+          setTheme('light');
+        }}
+      >
+        Set Light
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setTheme('dark');
+        }}
+      >
+        Set Dark
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setTheme('system');
+        }}
+      >
+        Set System
+      </button>
+    </div>
+  );
+};
+
 describe('ThemeProvider', () => {
   beforeEach(() => {
     localStorage.clear();
     document.documentElement.className = '';
   });
-
-  const ThemeConsumer: FC = () => {
-    const { theme, setTheme } = useTheme();
-    return (
-      <div>
-        <span data-testid="theme">{theme}</span>
-        <button
-          type="button"
-          onClick={() => {
-            setTheme('light');
-          }}
-        >
-          Set Light
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setTheme('dark');
-          }}
-        >
-          Set Dark
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setTheme('system');
-          }}
-        >
-          Set System
-        </button>
-      </div>
-    );
-  };
 
   it('initializes with default theme when nothing saved', async () => {
     const expectedTheme: Theme = 'light';
