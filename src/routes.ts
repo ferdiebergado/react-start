@@ -1,5 +1,5 @@
 import MainLayout from '@/components/layout/MainLayout';
-import AccountLayout from '@/features/account/components/AccountLayout';
+import AccountLayout from '@/features/account/AccountLayout';
 import { lazy } from 'react';
 import { type RouteObject } from 'react-router';
 
