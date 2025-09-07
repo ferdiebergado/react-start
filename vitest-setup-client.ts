@@ -67,6 +67,23 @@ const handlers = [
       message: 'Password reset link sent successfully',
     });
   }),
+
+  http.post('http://localhost:8888/auth/reset', async ({ request }) => {
+    const body = (await request.json()) as Record<string, string>;
+    if (body.password === 'Password2') {
+      return HttpResponse.json(
+        {
+          message: 'Invalid input',
+          error: { password: 'Passwords do not match' },
+        },
+        { status: 422 }
+      );
+    }
+
+    return HttpResponse.json({
+      message: 'Password reset successful',
+    });
+  }),
 ];
 
 const worker = setupWorker(...handlers);
