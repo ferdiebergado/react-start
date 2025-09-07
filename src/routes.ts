@@ -12,7 +12,7 @@ const SignIn = lazy(
   () => import('@/features/account/signin/components/Signin')
 );
 const ForgotPassword = lazy(
-  () => import('@/features/account/components/ForgotPassword')
+  () => import('@/features/account/forgot-password/components/ForgotPassword')
 );
 const ResetPassword = lazy(
   () => import('@/features/account/components/ResetPassword')
