@@ -1,5 +1,5 @@
 import { AccountContext, type User } from '@/features/account';
-import type { ContextProviderFactory } from '@/lib/context';
+import type { ContextProviderFactory } from '@/lib/types';
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 
 interface AccountProviderProps {

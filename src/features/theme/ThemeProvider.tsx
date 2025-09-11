@@ -1,5 +1,5 @@
 import { isTheme, ThemeProviderContext, type Theme } from '@/features/theme';
-import type { ContextProviderFactory } from '@/lib/context';
+import type { ContextProviderFactory } from '@/lib/types';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
 interface ThemeProviderProps {
