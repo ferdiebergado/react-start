@@ -6,7 +6,7 @@ import type {
   SuccessResponse,
   ValidationErrorResponse,
 } from '@/features/account/signin/types';
-import { api, ValidationError, type ErrorResponse } from '@/lib/api';
+import { api, apiRoutes, ValidationError, type ErrorResponse } from '@/lib/api';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
 
 const signinUser: SigninHandler = async (creds) => {
-  const res = await api.post('/auth/login', creds);
+  const res = await api.post(apiRoutes.auth.login, creds);
 
   if (!res.ok) {
     if (res.status === 422) {

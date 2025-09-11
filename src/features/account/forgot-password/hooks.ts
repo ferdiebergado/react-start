@@ -5,13 +5,13 @@ import type {
   SuccessResponse,
   ValidationErrorResponse,
 } from '@/features/account/forgot-password/types';
-import { api, ValidationError, type ErrorResponse } from '@/lib/api';
+import { api, apiRoutes, ValidationError, type ErrorResponse } from '@/lib/api';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
 const recoverPassword: ForgotPasswordHandler = async (email) => {
-  const res = await api.post('/auth/forgot', { email });
+  const res = await api.post(apiRoutes.auth.forgotPassword, { email });
 
   if (!res.ok) {
     if (res.status === 422) {

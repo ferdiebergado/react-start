@@ -106,3 +106,12 @@ export class ValidationError<T> extends Error {
     Object.setPrototypeOf(this, ValidationError.prototype);
   }
 }
+
+export const apiRoutes = {
+  auth: {
+    register: '/auth/register',
+    login: '/auth/login',
+    forgotPassword: '/auth/forgot',
+    resetPassword: '/auth/reset',
+  },
+} as const;

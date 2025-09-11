@@ -5,7 +5,7 @@ import type {
   SuccessResponse,
   ValidationErrorResponse,
 } from '@/features/account/reset-password/types';
-import { api, ValidationError, type ErrorResponse } from '@/lib/api';
+import { api, apiRoutes, ValidationError, type ErrorResponse } from '@/lib/api';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -14,7 +14,7 @@ const resetPassword: ResetPasswordHandler = async ({
   password,
   confirmPassword,
 }) => {
-  const res = await api.post('/auth/reset', {
+  const res = await api.post(apiRoutes.auth.resetPassword, {
     password,
     password_confirm: confirmPassword,
   });

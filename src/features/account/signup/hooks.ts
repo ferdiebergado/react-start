@@ -6,13 +6,13 @@ import type {
   SuccessResponse,
   ValidationErrorResponse,
 } from '@/features/account/signup/types';
-import { api, ValidationError, type ErrorResponse } from '@/lib/api';
+import { api, apiRoutes, ValidationError, type ErrorResponse } from '@/lib/api';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
 const signUpUser: SignupHandler = async (data) => {
-  const res = await api.post('/auth/register', data);
+  const res = await api.post(apiRoutes.auth.register, data);
 
   if (!res.ok) {
     if (res.status === 422) {
