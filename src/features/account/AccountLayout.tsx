@@ -1,7 +1,7 @@
+import Toast from '@/components/layout/Toast';
 import Spinner from '@/components/navigation/Spinner';
 import { Suspense, type FC } from 'react';
 import { Outlet } from 'react-router';
-import { Toaster } from 'sonner';
 
 const AccountLayout: FC = () => {
   return (
@@ -9,7 +9,7 @@ const AccountLayout: FC = () => {
       <Suspense fallback={<Spinner />}>
         <Outlet />
       </Suspense>
-      <Toaster position="top-right" richColors />
+      <Toast />
     </div>
   );
 };

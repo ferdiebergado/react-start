@@ -1,9 +1,9 @@
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+import Toast from '@/components/layout/Toast';
 import Spinner from '@/components/navigation/Spinner';
 import { Suspense, type FC } from 'react';
 import { Outlet } from 'react-router';
-import { Toaster } from 'sonner';
 
 const MainLayout: FC = () => {
   return (
@@ -14,7 +14,7 @@ const MainLayout: FC = () => {
           <Outlet />
         </Suspense>
       </main>
-      <Toaster position="top-right" richColors />
+      <Toast />
       <Footer />
     </div>
   );
