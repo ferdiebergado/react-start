@@ -27,7 +27,6 @@ export class ValidationError<T> extends Error {
     super(message);
     this.details = details;
     this.name = 'ValidationError';
-    Object.setPrototypeOf(this, ValidationError.prototype);
   }
 }
 
