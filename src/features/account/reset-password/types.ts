@@ -7,4 +7,4 @@ export type SuccessResponse = APIResponse<undefined, undefined>;
 export type ValidationErrorResponse = APIResponse<undefined, FormValues>;
 export type ResetPasswordHandler = (
   data: FormValues
-) => Promise<SuccessResponse>;
+) => Promise<SuccessResponse | undefined>;

@@ -20,4 +20,6 @@ interface Credentials {
 
 export type SuccessResponse = APIResponse<SigninData, undefined>;
 export type ValidationErrorResponse = APIResponse<undefined, FormValues>;
-export type SigninHandler = (creds: Credentials) => Promise<SuccessResponse>;
+export type SigninHandler = (
+  creds: Credentials
+) => Promise<SuccessResponse | undefined>;

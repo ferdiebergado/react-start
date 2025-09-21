@@ -4,9 +4,8 @@ import type {
   FormValues,
   SigninHandler,
   SuccessResponse,
-  ValidationErrorResponse,
 } from '@/features/account/signin/types';
-import { api, apiRoutes, ValidationError, type ErrorResponse } from '@/lib/api';
+import { api, apiRoutes, handleAPIError } from '@/lib/api';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
@@ -14,19 +13,13 @@ import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
 
 const signinUser: SigninHandler = async (creds) => {
-  const res = await api.post(apiRoutes.auth.login, creds);
+  try {
+    const res = await api.post(apiRoutes.auth.login, creds);
 
-  if (!res.ok) {
-    if (res.status === 422) {
-      const { message, error } = (await res.json()) as ValidationErrorResponse;
-      if (error) throw new ValidationError(message, error);
-    }
-
-    const { message } = (await res.json()) as ErrorResponse;
-    throw new Error(message);
+    return (await res.json()) as SuccessResponse;
+  } catch (error) {
+    handleAPIError(error);
   }
-
-  return (await res.json()) as SuccessResponse;
 };
 
 export const useSignInForm = () =>
@@ -45,14 +38,14 @@ export const useSignIn = () => {
 
   return useMutation({
     mutationFn: signinUser,
-    onSuccess: ({ data }) => {
-      if (data) {
+    onSuccess: (res) => {
+      if (res?.data) {
         const {
           accessToken,
           tokenType,
           expiresIn,
           user: { id, email },
-        } = data;
+        } = res.data;
 
         signin({
           id,

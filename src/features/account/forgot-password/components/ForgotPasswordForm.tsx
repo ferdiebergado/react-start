@@ -25,7 +25,7 @@ const ForgotPasswordForm: FC = () => {
 
   const onSubmit = ({ email }: FormValues) => {
     mutate(email, {
-      onSuccess: ({ message }) => toast.success(message),
+      onSuccess: (res) => res?.message && toast.success(res.message),
       onError: (serverError) => {
         if (serverError instanceof ValidationError) {
           const errors = serverError.details ?? {};

@@ -7,4 +7,6 @@ export type FormValues = z.infer<typeof formSchema>;
 export type SuccessResponse = APIResponse<undefined, undefined>;
 export type ValidationErrorResponse = APIResponse<undefined, FormValues>;
 
-export type ForgotPasswordHandler = (email: string) => Promise<SuccessResponse>;
+export type ForgotPasswordHandler = (
+  email: string
+) => Promise<SuccessResponse | undefined>;

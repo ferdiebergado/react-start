@@ -25,7 +25,7 @@ const ResetPasswordForm: FC = () => {
 
   const onSubmit = (values: FormValues) => {
     mutate(values, {
-      onSuccess: ({ message }) => toast.success(message),
+      onSuccess: (res) => res?.message && toast.success(res.message),
       onError: (serverError) => {
         if (serverError instanceof ValidationError) {
           const errors = serverError.details ?? {};

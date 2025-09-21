@@ -13,4 +13,6 @@ export interface SignUpData {
 
 export type SuccessResponse = APIResponse<SignUpData, undefined>;
 export type ValidationErrorResponse = APIResponse<undefined, FormValues>;
-export type SignupHandler = (data: FormValues) => Promise<SuccessResponse>;
+export type SignupHandler = (
+  data: FormValues
+) => Promise<SuccessResponse | undefined>;
