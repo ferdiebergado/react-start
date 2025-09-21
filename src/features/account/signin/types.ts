@@ -6,10 +6,10 @@ import type { z } from 'zod';
 export type FormValues = z.infer<typeof formSchema>;
 
 interface SigninData {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
-  expiresIn: number;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
   user: User;
 }
 

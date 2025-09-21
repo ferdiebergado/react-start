@@ -41,16 +41,20 @@ export const useSignIn = () => {
     onSuccess: (res) => {
       if (res?.data) {
         const {
-          accessToken,
-          tokenType,
-          expiresIn,
+          access_token,
+          token_type,
+          expires_in,
           user: { id, email },
         } = res.data;
 
         signin({
           id,
           email,
-          token: { value: accessToken, type: tokenType, expiresIn },
+          token: {
+            value: access_token,
+            type: token_type,
+            expiresIn: expires_in,
+          },
         });
 
         const locationState = location.state as { from?: string } | undefined;
