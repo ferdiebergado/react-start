@@ -10,6 +10,7 @@ export const apiRoutes = {
     login: '/auth/login',
     forgotPassword: '/auth/forgot',
     resetPassword: '/auth/reset',
+    verify: '/auth/verify',
   },
 } as const;
 

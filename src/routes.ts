@@ -17,6 +17,7 @@ const ForgotPassword = lazy(
 const ResetPassword = lazy(
   () => import('@/features/account/reset-password/components/ResetPassword')
 );
+const VerifyAccount = lazy(() => import('@/features/account/verify/Verify'));
 
 export const paths = {
   home: '/',
@@ -25,6 +26,7 @@ export const paths = {
     signin: '/account/signin',
     forgotPassword: '/account/forgot-password',
     resetPassword: '/account/reset-password',
+    verify: '/account/verify',
   },
   notFound: '*',
 } as const;
@@ -41,6 +43,7 @@ export const routes = [
       { path: paths.account.signin, Component: SignIn },
       { path: paths.account.forgotPassword, Component: ForgotPassword },
       { path: paths.account.resetPassword, Component: ResetPassword },
+      { path: paths.account.verify, Component: VerifyAccount },
     ],
   },
   { path: paths.notFound, Component: NotFound },
