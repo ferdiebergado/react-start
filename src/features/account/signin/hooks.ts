@@ -40,22 +40,11 @@ export const useSignIn = () => {
     mutationFn: signinUser,
     onSuccess: (res) => {
       if (res?.data) {
-        const {
-          access_token,
-          token_type,
-          expires_in,
-          user: { id, email },
-        } = res.data;
+        const { access_token, expires_in, user } = res.data;
 
-        signin({
-          id,
-          email,
-          token: {
-            value: access_token,
-            type: token_type,
-            expiresIn: expires_in,
-          },
-        });
+        api.setAccessToken(access_token, expires_in);
+
+        signin(user);
 
         const locationState = location.state as { from?: string } | undefined;
         const intendedURL = locationState?.from ?? paths.home;

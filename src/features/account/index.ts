@@ -9,7 +9,6 @@ export interface Token {
 export interface User {
   id: string;
   email: string;
-  token: Token;
 }
 
 export interface AccountState {
