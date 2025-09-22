@@ -5,7 +5,7 @@ import type { z } from 'zod';
 
 export type FormValues = z.infer<typeof formSchema>;
 
-interface SigninData {
+export interface SigninData {
   access_token: string;
   refresh_token: string;
   token_type: string;

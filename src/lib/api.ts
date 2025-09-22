@@ -1,4 +1,9 @@
-import { APIClient, HTTPError } from '@ferdiebergado/fetchx';
+import type { SigninData } from '@/features/account/signin/types';
+import {
+  APIClient,
+  HTTPError,
+  type TokenRenewHandler,
+} from '@ferdiebergado/fetchx';
 
 const BASEURL = 'http://localhost:8888';
 
@@ -11,8 +16,31 @@ export const apiRoutes = {
     forgotPassword: '/auth/forgot',
     resetPassword: '/auth/reset',
     verify: '/auth/verify',
+    refresh: '/auth/refresh',
   },
 } as const;
+
+const tokenRenewHandler: TokenRenewHandler = async () => {
+  const res = await api.post(apiRoutes.auth.refresh, undefined, {
+    credentials: 'include',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to refresh token');
+  }
+
+  const { data } = (await res.json()) as APIResponse<SigninData, undefined>;
+
+  if (!data) return { accessToken: '', expiresAt: 0 };
+
+  const expiresAt = Date.now() + data.expires_in * 1000;
+  return {
+    accessToken: data.access_token,
+    expiresAt,
+  };
+};
+
+api.setTokenRenewHandler(tokenRenewHandler);
 
 export type APIResponse<T, E> =
   | { message: string; data?: T; error?: undefined }
