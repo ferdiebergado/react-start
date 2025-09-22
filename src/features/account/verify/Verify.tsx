@@ -1,4 +1,6 @@
+import ErrorWrapper from '@/components/error/ErrorWrapper';
 import NotFound from '@/components/error/NotFound';
+import Spinner from '@/components/navigation/Spinner';
 import { api, apiRoutes, handleAPIError, type APIResponse } from '@/lib/api';
 import { paths } from '@/routes';
 import { useMutation } from '@tanstack/react-query';
@@ -7,7 +9,6 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 
 type SuccessResponse = APIResponse<undefined, undefined>;
-
 type VerifyAccountFn = (token: string) => Promise<SuccessResponse | undefined>;
 
 const verifyAccount: VerifyAccountFn = async (token) => {
@@ -25,7 +26,7 @@ const Verify: FC = () => {
 
   const navigate = useNavigate();
 
-  const { mutate, isError } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
     mutationFn: verifyAccount,
     onSuccess: (res) => {
       if (res?.message) toast.success(res.message);
@@ -36,8 +37,16 @@ const Verify: FC = () => {
   useEffect(() => {
     if (token) mutate(token);
   }, [mutate, token]);
+  if (!token) return <NotFound />;
 
-  if (!token || isError) return <NotFound />;
+  if (isPending) return <Spinner />;
+
+  if (isError)
+    return (
+      <ErrorWrapper>
+        <p className="text-destructive">{error.message}</p>
+      </ErrorWrapper>
+    );
 };
 
 export default Verify;
