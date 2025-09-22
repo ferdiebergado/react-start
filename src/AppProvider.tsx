@@ -1,4 +1,5 @@
 import ErrorFallback from '@/components/error/ErrorFallback';
+import Toast from '@/components/layout/Toast';
 import AccountProvider from '@/features/account/AccountProvider';
 import ThemeProvider from '@/features/theme/ThemeProvider';
 import {
@@ -20,7 +21,10 @@ const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
           {({ reset }) => (
             <ErrorBoundary FallbackComponent={ErrorFallback} onReset={reset}>
               <ThemeProvider>
-                <AccountProvider>{children}</AccountProvider>
+                <AccountProvider>
+                  {children}
+                  <Toast />
+                </AccountProvider>
               </ThemeProvider>
             </ErrorBoundary>
           )}

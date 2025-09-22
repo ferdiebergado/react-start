@@ -1,17 +1,9 @@
+import Toast from '@/components/layout/Toast';
 import AccountProvider from '@/features/account/AccountProvider';
+import ForgotPasswordForm from '@/features/account/forgot-password/components/ForgotPasswordForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import { describe, expect, it, vi, type Mock } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import ForgotPasswordForm from './ForgotPasswordForm';
-
-vi.mock('sonner', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-  Toaster: vi.fn(),
-}));
 
 const renderWithProviders = () => {
   const client = new QueryClient();
@@ -20,6 +12,7 @@ const renderWithProviders = () => {
     <QueryClientProvider client={client}>
       <AccountProvider>
         <ForgotPasswordForm />
+        <Toast />
       </AccountProvider>
     </QueryClientProvider>
   );
@@ -27,7 +20,7 @@ const renderWithProviders = () => {
 
 describe('ForgotPasswordForm', () => {
   it('sends reset link successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders();
+    const { getByRole, getByLabelText, getByText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('exists@mail.com');
@@ -35,10 +28,8 @@ describe('ForgotPasswordForm', () => {
     const submitBtn = getByRole('button', { name: /send reset link/i });
     await submitBtn.click();
 
-    await expect.poll(() => (toast.success as Mock).mock.calls.length).toBe(1);
-    expect(toast.success).toHaveBeenCalledWith(
-      'Password reset link sent successfully'
-    );
+    const toastMsg = getByText(/password reset link sent successfully/i);
+    await expect.element(toastMsg).toBeVisible();
   });
 
   it('shows server side validation errors', async () => {
@@ -53,7 +44,7 @@ describe('ForgotPasswordForm', () => {
     const emailErr = getByText(/email is not a valid email address/i);
     await expect.element(emailErr).toBeVisible();
 
-    await expect.poll(() => (toast.error as Mock).mock.calls.length).toBe(1);
-    expect(toast.error).toHaveBeenCalledWith('Invalid input');
+    const toastMsg = getByText(/invalid input/i);
+    await expect.element(toastMsg).toBeVisible();
   });
 });

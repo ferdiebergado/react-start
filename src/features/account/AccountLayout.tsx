@@ -1,4 +1,3 @@
-import Toast from '@/components/layout/Toast';
 import Spinner from '@/components/navigation/Spinner';
 import { Suspense, type FC } from 'react';
 import { Outlet } from 'react-router';
@@ -9,7 +8,6 @@ const AccountLayout: FC = () => {
       <Suspense fallback={<Spinner />}>
         <Outlet />
       </Suspense>
-      <Toast />
     </div>
   );
 };

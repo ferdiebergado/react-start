@@ -1,18 +1,10 @@
+import Toast from '@/components/layout/Toast';
+import AccountProvider from '@/features/account/AccountProvider';
+import SigninForm from '@/features/account/signin/components/SigninForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router';
-import { toast } from 'sonner';
-import { describe, expect, it, vi, type Mock } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import AccountProvider from '../../AccountProvider';
-import SigninForm from './SigninForm';
-
-vi.mock('sonner', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-  Toaster: vi.fn(),
-}));
 
 const renderWithProviders = () => {
   const client = new QueryClient();
@@ -22,6 +14,7 @@ const renderWithProviders = () => {
       <QueryClientProvider client={client}>
         <AccountProvider>
           <SigninForm />
+          <Toast />
         </AccountProvider>
       </QueryClientProvider>
     </MemoryRouter>
@@ -30,7 +23,7 @@ const renderWithProviders = () => {
 
 describe('SigninForm', () => {
   it('signs in successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders();
+    const { getByRole, getByLabelText, getByText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('exists@mail.com');
@@ -41,12 +34,12 @@ describe('SigninForm', () => {
     const submitBtn = getByRole('button', { name: /sign in/i });
     await submitBtn.click();
 
-    await expect.poll(() => (toast.success as Mock).mock.calls.length).toBe(1);
-    expect(toast.success).toHaveBeenCalledWith('Sign in successful');
+    const toastMsg = getByText(/sign in successful/i);
+    await expect.element(toastMsg).toBeVisible();
   });
 
   it('shows server side errors', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders();
+    const { getByRole, getByLabelText, getByText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('unknown@mail.com');
@@ -57,7 +50,7 @@ describe('SigninForm', () => {
     const submitBtn = getByRole('button', { name: /sign in/i });
     await submitBtn.click();
 
-    await expect.poll(() => (toast.error as Mock).mock.calls.length).toBe(1);
-    expect(toast.error).toHaveBeenCalledWith('Invalid username/password');
+    const toastMsg = getByText(/invalid username\/password/i);
+    await expect.element(toastMsg).toBeVisible();
   });
 });

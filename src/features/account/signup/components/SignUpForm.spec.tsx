@@ -1,16 +1,8 @@
+import Toast from '@/components/layout/Toast';
 import SignupForm from '@/features/account/signup/components/SignupForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import { describe, expect, it, vi, type Mock } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-
-vi.mock('sonner', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-  Toaster: vi.fn(),
-}));
 
 const renderWithProviders = () => {
   const client = new QueryClient();
@@ -18,13 +10,14 @@ const renderWithProviders = () => {
   return render(
     <QueryClientProvider client={client}>
       <SignupForm />
+      <Toast />
     </QueryClientProvider>
   );
 };
 
 describe('SignUpForm', () => {
   it('signs up successfully', async () => {
-    const { getByRole, getByLabelText } = renderWithProviders();
+    const { getByRole, getByLabelText, getByText } = renderWithProviders();
 
     const emailInput = getByLabelText(/email/i);
     await emailInput.fill('new@mail.com');
@@ -38,8 +31,8 @@ describe('SignUpForm', () => {
     const submitBtn = getByRole('button', { name: /sign up/i });
     await submitBtn.click();
 
-    await expect.poll(() => (toast.success as Mock).mock.calls.length).toBe(1);
-    expect(toast.success).toHaveBeenCalledWith('Signup successful');
+    const toastMsg = getByText(/signup successful/i);
+    await expect.element(toastMsg).toBeVisible();
   });
 
   it('shows server side validation errors', async () => {
@@ -59,7 +52,7 @@ describe('SignUpForm', () => {
 
     await expect.element(getByText(/email already in use/i)).toBeVisible();
 
-    await expect.poll(() => (toast.error as Mock).mock.calls.length).toBe(1);
-    expect(toast.error).toHaveBeenCalledWith('Validation failed');
+    const toastMsg = getByText(/validation failed/i);
+    await expect.element(toastMsg).toBeVisible();
   });
 });
