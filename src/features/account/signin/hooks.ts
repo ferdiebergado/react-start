@@ -2,10 +2,15 @@ import { useAccount } from '@/features/account';
 import { formSchema } from '@/features/account/signin/formschema';
 import type {
   FormValues,
+  SigninData,
   SigninHandler,
-  SuccessResponse,
 } from '@/features/account/signin/types';
-import { api, apiRoutes, handleAPIError } from '@/lib/api';
+import {
+  api,
+  apiRoutes,
+  handleAPIError,
+  type SuccessResponse,
+} from '@/lib/api';
 import { paths } from '@/routes';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation } from '@tanstack/react-query';
@@ -14,9 +19,12 @@ import { useLocation, useNavigate } from 'react-router';
 
 const signinUser: SigninHandler = async (creds) => {
   try {
-    const res = await api.post(apiRoutes.auth.login, creds);
+    const res: SuccessResponse<SigninData> = await api.post(
+      apiRoutes.auth.login,
+      creds
+    );
 
-    return (await res.json()) as SuccessResponse;
+    return res;
   } catch (error) {
     handleAPIError(error);
   }

@@ -1,6 +1,6 @@
 import type { User } from '@/features/account';
 import type { formSchema } from '@/features/account/signin/formschema';
-import type { APIResponse } from '@/lib/api';
+import type { SuccessResponse } from '@/lib/api';
 import type { z } from 'zod';
 
 export type FormValues = z.infer<typeof formSchema>;
@@ -18,8 +18,6 @@ interface Credentials {
   password: string;
 }
 
-export type SuccessResponse = APIResponse<SigninData, undefined>;
-export type ValidationErrorResponse = APIResponse<undefined, FormValues>;
 export type SigninHandler = (
   creds: Credentials
-) => Promise<SuccessResponse | undefined>;
+) => Promise<SuccessResponse<SigninData> | undefined>;

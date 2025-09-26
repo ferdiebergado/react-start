@@ -2,10 +2,15 @@ import { queryKeys } from '@/features/account';
 import { formSchema } from '@/features/account/signup/formschema';
 import type {
   FormValues,
+  SignUpData,
   SignupHandler,
-  SuccessResponse,
 } from '@/features/account/signup/types';
-import { api, apiRoutes, handleAPIError } from '@/lib/api';
+import {
+  api,
+  apiRoutes,
+  handleAPIError,
+  type SuccessResponse,
+} from '@/lib/api';
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -16,13 +21,16 @@ const signUpUser: SignupHandler = async ({
   confirmPassword,
 }) => {
   try {
-    const res = await api.post(apiRoutes.auth.register, {
-      email,
-      password,
-      password_confirm: confirmPassword,
-    });
+    const res: SuccessResponse<SignUpData> = await api.post(
+      apiRoutes.auth.register,
+      {
+        email,
+        password,
+        password_confirm: confirmPassword,
+      }
+    );
 
-    return (await res.json()) as SuccessResponse;
+    return res;
   } catch (error) {
     handleAPIError(error);
   }

@@ -1,5 +1,5 @@
 import type { formSchema } from '@/features/account/signup/formschema';
-import type { APIResponse } from '@/lib/api';
+import type { SuccessResponse } from '@/lib/api';
 import type { z } from 'zod';
 
 export type FormValues = z.infer<typeof formSchema>;
@@ -11,8 +11,6 @@ export interface SignUpData {
   updatedAt: Date;
 }
 
-export type SuccessResponse = APIResponse<SignUpData, undefined>;
-export type ValidationErrorResponse = APIResponse<undefined, FormValues>;
 export type SignupHandler = (
   data: FormValues
-) => Promise<SuccessResponse | undefined>;
+) => Promise<SuccessResponse<SignUpData> | undefined>;

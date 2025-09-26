@@ -5,9 +5,9 @@ import {
   type TokenRenewHandler,
 } from '@ferdiebergado/fetchx';
 
-const BASEURL = 'http://localhost:8888';
+const baseUrl = 'http://localhost:8888';
 
-export const api = new APIClient(BASEURL);
+export const api = new APIClient({ baseUrl });
 
 export const apiRoutes = {
   auth: {
@@ -21,15 +21,13 @@ export const apiRoutes = {
 } as const;
 
 const tokenRenewHandler: TokenRenewHandler = async () => {
-  const res = await api.post(apiRoutes.auth.refresh, undefined, {
-    credentials: 'include',
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to refresh token');
-  }
-
-  const { data } = (await res.json()) as APIResponse<SigninData, undefined>;
+  const { data }: SuccessResponse<SigninData> = await api.post(
+    apiRoutes.auth.refresh,
+    undefined,
+    {
+      credentials: 'include',
+    }
+  );
 
   if (!data) return { accessToken: '', expiresAt: 0 };
 
@@ -42,11 +40,17 @@ const tokenRenewHandler: TokenRenewHandler = async () => {
 
 api.setTokenRenewHandler(tokenRenewHandler);
 
-export type APIResponse<T, E> =
-  | { message: string; data?: T; error?: undefined }
-  | { message: string; error: E; data?: undefined };
+export interface SuccessResponse<T = unknown> {
+  message: string;
+  data?: T;
+}
 
-export type ErrorResponse = APIResponse<undefined, undefined>;
+export interface ErrorResponse
+  extends Record<string, string | undefined | Record<string, string>> {
+  message: string;
+  code?: string;
+  error?: Record<string, string>;
+}
 
 export class ValidationError<T> extends Error {
   name: string;
@@ -63,10 +67,7 @@ export function handleAPIError(error: unknown) {
   if (error instanceof HTTPError) {
     const { status, responseBody } = error;
     if (status === 422) {
-      const { message, error } = responseBody as APIResponse<
-        undefined,
-        unknown
-      >;
+      const { message, error } = responseBody as ErrorResponse;
       if (error) throw new ValidationError(message, error);
     }
 
