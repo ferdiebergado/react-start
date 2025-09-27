@@ -7,7 +7,6 @@ import { render, renderHook } from 'vitest-browser-react';
 const mockUser: User = {
   id: 'abc123',
   email: 'abc@example.com',
-  token: { value: 'token', type: 'Bearer', expiresIn: 18000 },
 };
 
 const AccountConsumer: FC = () => {
@@ -83,7 +82,6 @@ describe('useAccount', () => {
     const mockUser: User = {
       id: 'abc1',
       email: 'alice@example.com',
-      token: { value: 'token', type: 'Bearer', expiresIn: 1800 },
     };
 
     act(() => {
