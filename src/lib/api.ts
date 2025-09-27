@@ -5,9 +5,14 @@ import {
   type TokenRenewHandler,
 } from '@ferdiebergado/fetchx';
 
-const baseUrl = 'http://localhost:8888';
+const csrfCookieName = '__Secure-csrf_token';
+const csrfHeaderName = 'X-CSRF-Token';
 
-export const api = new APIClient({ baseUrl });
+export const api = new APIClient({
+  baseUrl: '/api',
+  csrfCookieName,
+  csrfHeaderName,
+});
 
 export const apiRoutes = {
   auth: {
