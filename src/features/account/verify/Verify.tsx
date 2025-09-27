@@ -1,20 +1,26 @@
 import ErrorWrapper from '@/components/error/ErrorWrapper';
 import NotFound from '@/components/error/NotFound';
 import Spinner from '@/components/navigation/Spinner';
-import { api, apiRoutes, handleAPIError, type APIResponse } from '@/lib/api';
+import {
+  api,
+  apiRoutes,
+  handleAPIError,
+  type SuccessResponse,
+} from '@/lib/api';
 import { paths } from '@/routes';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, type FC } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 
-type SuccessResponse = APIResponse<undefined, undefined>;
 type VerifyAccountFn = (token: string) => Promise<SuccessResponse | undefined>;
 
 const verifyAccount: VerifyAccountFn = async (token) => {
   try {
-    const res = await api.post(apiRoutes.auth.verify, { token });
-    return (await res.json()) as SuccessResponse;
+    const res: SuccessResponse = await api.post(apiRoutes.auth.verify, {
+      token,
+    });
+    return res;
   } catch (error) {
     handleAPIError(error);
   }
