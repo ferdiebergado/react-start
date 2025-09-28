@@ -1,4 +1,12 @@
+import {
+  type SuccessResponse,
+  api,
+  apiRoutes,
+  handleAPIError,
+} from '@/lib/api';
+import { useMutation } from '@tanstack/react-query';
 import { createContext, use } from 'react';
+import type { SigninData } from './signin/types';
 
 export interface Token {
   value: string;
@@ -13,6 +21,7 @@ export interface User {
 
 export interface AccountState {
   user?: User;
+  isLoading: boolean;
   signin: (user: User) => void;
   signout: () => void;
 }
@@ -33,3 +42,20 @@ export function useAccount() {
 export const queryKeys = {
   accounts: ['accounts'],
 };
+
+export async function refreshToken(): Promise<
+  SuccessResponse<SigninData> | undefined
+> {
+  try {
+    const data: SuccessResponse<SigninData> = await api.post(
+      apiRoutes.auth.refresh,
+      undefined,
+      { credentials: 'include' }
+    );
+    return data;
+  } catch (error) {
+    handleAPIError(error);
+  }
+}
+
+export const useRefreshToken = () => useMutation({ mutationFn: refreshToken });

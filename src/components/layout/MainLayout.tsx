@@ -7,9 +7,13 @@ import { Suspense, type FC } from 'react';
 import { Navigate, Outlet } from 'react-router';
 
 const MainLayout: FC = () => {
-  const { user } = useAccount();
+  const { user, isLoading } = useAccount();
 
-  if (!user) return <Navigate to={paths.account.signin} />;
+  if (isLoading) return <Spinner />;
+
+  if (!user) {
+    return <Navigate to={paths.account.signin} />;
+  }
 
   return (
     <div className="flex min-h-screen flex-col">

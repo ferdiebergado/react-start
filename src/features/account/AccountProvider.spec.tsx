@@ -1,5 +1,6 @@
 import { useAccount, type User } from '@/features/account';
 import AccountProvider from '@/features/account/AccountProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { FC } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, renderHook } from 'vitest-browser-react';
@@ -31,13 +32,26 @@ const AccountConsumer: FC = () => {
   );
 };
 
+const queryClient = new QueryClient();
+
 const renderWithProvider = () => {
   return render(
-    <AccountProvider>
-      <AccountConsumer />
-    </AccountProvider>
+    <QueryClientProvider client={queryClient}>
+      <AccountProvider>
+        <AccountConsumer />
+      </AccountProvider>
+    </QueryClientProvider>
   );
 };
+
+const renderHookWithProvider = () =>
+  renderHook(() => useAccount(), {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={queryClient}>
+        <AccountProvider>{children}</AccountProvider>
+      </QueryClientProvider>
+    ),
+  });
 
 describe('AccountProvider', () => {
   it('provides default state', async () => {
@@ -67,17 +81,13 @@ describe('useAccount', () => {
   });
 
   it('provides default state', () => {
-    const { result } = renderHook(() => useAccount(), {
-      wrapper: AccountProvider,
-    });
+    const { result } = renderHookWithProvider();
 
     expect(result.current.user).toBeUndefined();
   });
 
   it('signs in and signs out a user', () => {
-    const { result, act } = renderHook(() => useAccount(), {
-      wrapper: AccountProvider,
-    });
+    const { result, act } = renderHookWithProvider();
 
     const mockUser: User = {
       id: 'abc1',
