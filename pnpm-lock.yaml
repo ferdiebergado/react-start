@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@ferdiebergado/fetchx':
-        specifier: ^0.0.14
-        version: 0.0.14
+        specifier: ^0.0.19
+        version: 0.0.19
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.63.0(react@19.1.1))
@@ -516,8 +516,8 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@ferdiebergado/fetchx@0.0.14':
-    resolution: {integrity: sha512-BvFRxFymiQMvsPfkuaVpIQv18QJ9ShRh+9GGdSFvE7uAiI+SFbUjR1t6ITRN8wR6qYtc+vESNHEKZZFuPkrmiQ==}
+  '@ferdiebergado/fetchx@0.0.19':
+    resolution: {integrity: sha512-53gE25xjT6yo+8cRqshLCxDUVzixROtHXleGneglJTa5MZpT7miLHcMQMQLjA+zR+AH2WSTvkC7BfY6UPYASVQ==}
 
   '@floating-ui/core@1.7.3':
     resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
@@ -3650,7 +3650,7 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@ferdiebergado/fetchx@0.0.14': {}
+  '@ferdiebergado/fetchx@0.0.19': {}
 
   '@floating-ui/core@1.7.3':
     dependencies:
