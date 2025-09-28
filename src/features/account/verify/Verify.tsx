@@ -42,7 +42,8 @@ const Verify: FC = () => {
 
   useEffect(() => {
     if (token) mutate(token);
-  }, [mutate, token]);
+  }, []);
+
   if (!token) return <NotFound />;
 
   if (isPending) return <Spinner />;
