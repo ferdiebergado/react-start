@@ -1,10 +1,6 @@
 import { useAccount } from '@/features/account';
 import { formSchema } from '@/features/account/signin/formschema';
-import type {
-  FormValues,
-  SigninData,
-  SigninHandler,
-} from '@/features/account/signin/types';
+import type { FormValues, SigninData } from '@/features/account/signin/types';
 import {
   api,
   apiRoutes,
@@ -17,7 +13,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
 
-const signinUser: SigninHandler = async (creds) => {
+async function signinUser(creds: { email: string; password: string }) {
   try {
     const res: SuccessResponse<SigninData> = await api.post(
       apiRoutes.auth.login,
@@ -28,7 +24,7 @@ const signinUser: SigninHandler = async (creds) => {
   } catch (error) {
     handleAPIError(error);
   }
-};
+}
 
 export const useSignInForm = () =>
   useForm<FormValues>({
