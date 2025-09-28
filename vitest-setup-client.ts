@@ -12,7 +12,7 @@ const handlers = [
     });
   }),
 
-  http.post('http://localhost:8888/auth/register', async ({ request }) => {
+  http.post('/api/auth/register', async ({ request }) => {
     const body = (await request.json()) as Record<string, string>;
     if (body.email === 'exists@mail.com') {
       return HttpResponse.json(
@@ -35,7 +35,7 @@ const handlers = [
     });
   }),
 
-  http.post('http://localhost:8888/auth/login', async ({ request }) => {
+  http.post('/api/auth/login', async ({ request }) => {
     const body = (await request.json()) as Record<string, string>;
     if (body.email === 'exists@mail.com') {
       return HttpResponse.json({
@@ -51,7 +51,7 @@ const handlers = [
     );
   }),
 
-  http.post('http://localhost:8888/auth/forgot', async ({ request }) => {
+  http.post('/api/auth/forgot', async ({ request }) => {
     const body = (await request.json()) as Record<string, string>;
     if (body.email === 'invalid@mail.com') {
       return HttpResponse.json(
@@ -68,7 +68,7 @@ const handlers = [
     });
   }),
 
-  http.post('http://localhost:8888/auth/reset', async ({ request }) => {
+  http.post('/api/auth/reset', async ({ request }) => {
     const body = (await request.json()) as Record<string, string>;
     if (body.password === 'Password2') {
       return HttpResponse.json(
