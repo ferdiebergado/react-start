@@ -35,8 +35,11 @@ const Verify: FC = () => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: verifyAccount,
     onSuccess: (res) => {
-      if (res?.message) toast.success(res.message);
+      toast.success(res?.message ?? 'Verification successful!');
       navigate(paths.account.signin, { replace: true });
+    },
+    onError: (err) => {
+      toast.error(err.message || 'Verification failed.');
     },
   });
 
@@ -51,9 +54,15 @@ const Verify: FC = () => {
   if (isError)
     return (
       <ErrorWrapper>
-        <p className="text-destructive">{error.message}</p>
+        <p className="text-muted text-lg">
+          {error instanceof Error && error.message
+            ? error.message
+            : 'An unknown error occurred.'}
+        </p>
       </ErrorWrapper>
     );
+
+  return null;
 };
 
 export default Verify;
