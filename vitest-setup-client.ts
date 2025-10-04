@@ -84,6 +84,22 @@ const handlers = [
       message: 'Password reset successful',
     });
   }),
+
+  http.post('/api/auth/verify', async ({ request }) => {
+    const body = (await request.json()) as Record<string, string>;
+    if (body.token === 'valid_token') {
+      return HttpResponse.json({
+        message: 'Verification complete. You can now login.',
+      });
+    }
+
+    return HttpResponse.json(
+      {
+        message: 'Invalid username/password',
+      },
+      { status: 401 }
+    );
+  }),
 ];
 
 const worker = setupWorker(...handlers);
