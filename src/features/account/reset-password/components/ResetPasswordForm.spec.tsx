@@ -1,6 +1,7 @@
 import Toast from '@/components/layout/Toast';
 import ResetPasswordForm from '@/features/account/reset-password/components/ResetPasswordForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 
@@ -8,10 +9,14 @@ const renderWithProviders = () => {
   const client = new QueryClient();
 
   return render(
-    <QueryClientProvider client={client}>
-      <ResetPasswordForm />
-      <Toast />
-    </QueryClientProvider>
+    <MemoryRouter initialEntries={['/reset-password?token=123']}>
+      <QueryClientProvider client={client}>
+        <Routes>
+          <Route path="/reset-password" element={<ResetPasswordForm />} />
+        </Routes>
+        <Toast />
+      </QueryClientProvider>
+    </MemoryRouter>
   );
 };
 
