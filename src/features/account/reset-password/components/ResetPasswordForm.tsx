@@ -17,17 +17,18 @@ import type { FormValues } from '@/features/account/reset-password/types';
 import { ValidationError } from '@/lib/api';
 import { replaceFormErrors } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
+import type { FC } from 'react';
 import { useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm: FC = () => {
   const form = useResetPasswordForm();
   const { mutate, isPending } = useResetPassword();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
   if (!token) {
-    return NotFound;
+    return <NotFound />;
   }
 
   const onSubmit = (values: FormValues) => {
