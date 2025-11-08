@@ -1,3 +1,4 @@
+import NotFound from '@/components/error/NotFound';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -16,15 +17,22 @@ import type { FormValues } from '@/features/account/reset-password/types';
 import { ValidationError } from '@/lib/api';
 import { replaceFormErrors } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
-import type { FC } from 'react';
+import { useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 
-const ResetPasswordForm: FC = () => {
+const ResetPasswordForm = () => {
   const form = useResetPasswordForm();
   const { mutate, isPending } = useResetPassword();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+
+  if (!token) {
+    return NotFound;
+  }
 
   const onSubmit = (values: FormValues) => {
-    mutate(values, {
+    const data = { token, form: values };
+    mutate(data, {
       onSuccess: (res) => res?.message && toast.success(res.message),
       onError: (serverError) => {
         if (serverError instanceof ValidationError) {
